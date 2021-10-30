@@ -21,7 +21,7 @@ public class PostHandler {
     private final PostRepository postRepository;
 
     public Mono<ServerResponse> create(ServerRequest req) {
-        Mono<Post> savedPost = req.bodyToMono(Post.class).flatMap(post -> postRepository.save(post));
+        Mono<Post> savedPost = req.bodyToMono(Post.class).flatMap(postRepository::save);
         return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(savedPost, Post.class));
     }
 
@@ -45,7 +45,7 @@ public class PostHandler {
             post.setPostId(postId);
             return post;
         });
-        Mono<Post> savedPost = newPost.flatMap(post -> postRepository.save(post));
+        Mono<Post> savedPost = newPost.flatMap(postRepository::save);
         return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(savedPost, Post.class));
     }
 

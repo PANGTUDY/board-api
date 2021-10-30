@@ -6,6 +6,6 @@ import reactor.core.publisher.Mono;
 
 public interface PostRepository extends ReactiveCrudRepository<Post, Integer> {
     Mono<Post> findPostByCategoryId(Integer categoryId);
-    Mono<Post> findPostByWriter(Integer postId);
-    Mono<Post> findPostByTitle(String Title);
+    Mono<Post> findPostByWriter(String writer);
+    Mono<Post> findPostByTitle(String title);
 }
