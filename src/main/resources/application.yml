@@ -22,3 +22,12 @@ logging:
       springframework:
         r2dbc: DEBUG
 debug: true
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    path: /board/swagger
+    display-request-duration: true
+    groups-order: DESC
+    operationsSorter: method
+    disable-swagger-default-url: true
