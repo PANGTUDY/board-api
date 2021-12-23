@@ -30,6 +30,8 @@ public class CommentHandler {
         return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(comments, Comment.class));
     }
 
+    //TODO : findByPostId로 포스트 내 댓글 가져오기
+
     public Mono<ServerResponse> read(ServerRequest req) {
         int postId = Integer.valueOf(req.pathVariable("post_id"));
         int commentId = Integer.valueOf(req.pathVariable("comment_id"));

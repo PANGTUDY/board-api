@@ -15,5 +15,5 @@ import org.springframework.data.relational.core.mapping.Table;
 public class Tag {
     @Id
     private String tag;
-    private String postId;
+    private Integer postId;
 }

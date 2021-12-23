@@ -1,9 +1,12 @@
 package com.pangtudy.boardapi.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Table
@@ -20,7 +23,7 @@ public class Comment {
     private int followId;
     private String writer;
     private String contents;
-    private Date date;
-    private Date modifiedDate;
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    private LocalDateTime date;
     private int postId;
 }
