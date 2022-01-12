@@ -36,16 +36,19 @@ public class CommentRouter {
                     operation = @Operation(operationId = "getComment", responses = {
                             @ApiResponse(responseCode = "200", description = "successful operation",
                                     content = @Content(schema = @Schema(implementation = Comment.class))),
-                            @ApiResponse(responseCode = "400", description = "Invalid Comment details supplied")},
-                            parameters = {@Parameter(in = ParameterIn.PATH, name = "comment_id")}
+                            @ApiResponse(responseCode = "400", description = "Invalid Comment details supplied")}, parameters = {
+                            @Parameter(in = ParameterIn.PATH, name = "post_id"),
+                            @Parameter(in = ParameterIn.PATH, name = "comment_id")}
                     )),
             @RouterOperation(path = "/board/posts/{post_id}/comments/{comment_id}"
                     , produces = {
                     MediaType.APPLICATION_JSON_VALUE}, method = RequestMethod.PATCH, beanClass = CommentHandler.class, beanMethod = "update",
                     operation = @Operation(operationId = "updateComment", responses = {
-                            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Comment.class))),
+                            @ApiResponse(responseCode = "200", description = "successful operation",
+                                    content = @Content(schema = @Schema(implementation = Comment.class))),
                             @ApiResponse(responseCode = "400", description = "Invalid Comment ID supplied"),
                             @ApiResponse(responseCode = "404", description = "Comment not found")}, parameters = {
+                            @Parameter(in = ParameterIn.PATH, name = "post_id"),
                             @Parameter(in = ParameterIn.PATH, name = "comment_id")}
                             , requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = Comment.class))))
             ),
@@ -55,15 +58,26 @@ public class CommentRouter {
                     @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(mediaType = "Boolean")),
                     @ApiResponse(responseCode = "400", description = "Invalid Comment ID supplied"),
                     @ApiResponse(responseCode = "404", description = "Comment not found")}, parameters = {
+                    @Parameter(in = ParameterIn.PATH, name = "post_id"),
                     @Parameter(in = ParameterIn.PATH, name = "comment_id")}
             )),
             @RouterOperation(path = "/board/posts/{post_id}/comments", produces = {
                     MediaType.APPLICATION_JSON_VALUE}, method = RequestMethod.POST, beanClass = CommentHandler.class, beanMethod = "create",
                     operation = @Operation(operationId = "insertComment", responses = {
                             @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Comment.class))),
-                            @ApiResponse(responseCode = "400", description = "Invalid Comment details supplied")}
+                            @ApiResponse(responseCode = "400", description = "Invalid Comment details supplied")}, parameters = {
+                            @Parameter(in = ParameterIn.PATH, name = "post_id")}
                             , requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = Comment.class)))
                     )),
+            @RouterOperation(path = "/board/posts/{post_id}/comments", produces = {
+                    MediaType.APPLICATION_JSON_VALUE},
+                    beanClass = CommentHandler.class, method = RequestMethod.GET, beanMethod = "readAll",
+                    operation = @Operation(operationId = "getComments", responses = {
+                            @ApiResponse(responseCode = "200", description = "successful operation",
+                                    content = @Content(schema = @Schema(implementation = Comment.class))),
+                            @ApiResponse(responseCode = "400", description = "Invalid Comment details supplied")}, parameters = {
+                            @Parameter(in = ParameterIn.PATH, name = "post_id")}
+                    ))
     })
     @Bean
     public RouterFunction<ServerResponse> commentRoutes() {
