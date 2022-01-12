@@ -13,7 +13,7 @@ public class WebConfig implements WebFluxConfigurer {
         corsRegistry.addMapping("/**")
                 .allowedOrigins("*");
         corsRegistry.addMapping("/board/**")
-                .allowedOrigins("http://localhost:8080")
+                .allowedOrigins("*")
                 .allowedMethods("GET", "POST", "PUT", "DELETE")
                 .allowCredentials(true)
                 .maxAge(3600);
