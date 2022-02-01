@@ -69,7 +69,8 @@ public class PostRouter {
                     beanClass = PostHandler.class, method = RequestMethod.GET, beanMethod = "readAll",
                     operation = @Operation(operationId = "getPosts", responses = {
                             @ApiResponse(responseCode = "200", description = "successful operation",
-                                    content = @Content(schema = @Schema(implementation = Post.class)))}
+                                    content = @Content(schema = @Schema(implementation = Post.class)))},
+                            parameters = {@Parameter(name = "category_id", in = ParameterIn.QUERY, schema = @Schema(type = "Integer"))}
                     ))
     })
     @Bean

@@ -5,14 +5,13 @@ import com.pangtudy.boardapi.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.function.Consumer;
+import java.util.Optional;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
@@ -29,7 +28,11 @@ public class PostHandler {
     }
 
     public Mono<ServerResponse> readAll(ServerRequest req) {
-        Flux<Post> posts = postRepository.findAll();
+        Optional<String> categoryId = req.queryParam("category_id");
+        Flux<Post> posts;
+        Integer categoryNum= categoryId.map(Integer::valueOf).orElse(0);
+        if (categoryNum==0) posts = postRepository.findAll();
+        else posts = postRepository.findPostByCategoryId(categoryNum);
         return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(posts, Post.class));
     }
 
