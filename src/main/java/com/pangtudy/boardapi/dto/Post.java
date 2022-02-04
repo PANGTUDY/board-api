@@ -22,7 +22,7 @@ public class Post {
     private String tags;
     private int followId;
     private String title;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime date;
     private String writer;
     private int likes;
