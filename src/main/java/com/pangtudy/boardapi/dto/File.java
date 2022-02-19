@@ -14,7 +14,7 @@ import org.springframework.data.relational.core.mapping.Table;
 @AllArgsConstructor
 public class File {
     @Id
-    private int fileId;
+    private Integer fileId;
     private String fileName;
     private String filePath;
     private String fileType;

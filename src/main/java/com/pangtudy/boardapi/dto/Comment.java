@@ -17,12 +17,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Comment {
     @Id
-    private int commentId;
-    private int followId;
+    private Integer commentId;
+    private Integer followId;
     private String writer;
     private String contents;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime date;
     private LocalDateTime modifiedDate;
-    private int postId;
+    private Integer postId;
 }

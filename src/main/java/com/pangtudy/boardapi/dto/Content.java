@@ -13,5 +13,5 @@ import org.springframework.data.relational.core.mapping.Table;
 @AllArgsConstructor
 public class Content {
     private String contents;
-    private int postId;
+    private Integer postId;
 }
