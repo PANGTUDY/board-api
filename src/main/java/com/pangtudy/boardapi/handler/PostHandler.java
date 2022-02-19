@@ -1,5 +1,6 @@
 package com.pangtudy.boardapi.handler;
 
+import com.pangtudy.boardapi.dto.InputPost;
 import com.pangtudy.boardapi.dto.Post;
 import com.pangtudy.boardapi.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,11 @@ public class PostHandler {
     private final PostRepository postRepository;
 
     public Mono<ServerResponse> create(ServerRequest req) {
-        Mono<Post> savedPost = req.bodyToMono(Post.class).flatMap(post -> postRepository.save(post));
+        Mono<InputPost> newPost = req.bodyToMono(InputPost.class);
+        Mono<Post> savedPost = newPost
+                .flatMap(value -> Mono.just(new Post(null, value.getCategoryId(), value.getTags(), value.getTitle(), value.getDate(), value.getWriter(), 0)))
+                .flatMap(category -> postRepository.save(category));
+
         return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(savedPost, Post.class));
     }
 

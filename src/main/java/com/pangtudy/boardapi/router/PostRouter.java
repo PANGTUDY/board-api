@@ -1,5 +1,6 @@
 package com.pangtudy.boardapi.router;
 
+import com.pangtudy.boardapi.dto.InputPost;
 import com.pangtudy.boardapi.dto.Post;
 import com.pangtudy.boardapi.handler.PostHandler;
 import io.swagger.v3.oas.annotations.Operation;
@@ -62,7 +63,7 @@ public class PostRouter {
                     operation = @Operation(operationId = "insertPost", responses = {
                             @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Post.class))),
                             @ApiResponse(responseCode = "400", description = "Invalid Post details supplied")}
-                            , requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = Post.class)))
+                            , requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = InputPost.class)))
                     )),
             @RouterOperation(path = "/board/posts", produces = {
                     MediaType.APPLICATION_JSON_VALUE},
