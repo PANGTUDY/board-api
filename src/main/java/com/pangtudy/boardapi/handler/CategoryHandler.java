@@ -1,8 +1,8 @@
 package com.pangtudy.boardapi.handler;
 
 import com.pangtudy.boardapi.dto.Category;
+import com.pangtudy.boardapi.dto.InputCategory;
 import com.pangtudy.boardapi.repository.CategoryRepository;
-import com.pangtudy.boardapi.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -22,7 +22,11 @@ public class CategoryHandler {
     private final CategoryRepository categoryRepository;
 
     public Mono<ServerResponse> create(ServerRequest req) {
-        Mono<Category> savedCategory = req.bodyToMono(Category.class).flatMap(category -> categoryRepository.save(category));
+        Mono<InputCategory> newCategory = req.bodyToMono(InputCategory.class);
+        Mono<Category> savedCategory = newCategory
+                .flatMap(value -> Mono.just(new Category(null, value.getCategoryName())))
+                .flatMap(category -> categoryRepository.save(category));
+
         return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(savedCategory, Category.class));
     }
 

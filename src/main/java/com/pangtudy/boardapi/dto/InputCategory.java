@@ -1,7 +1,6 @@
 package com.pangtudy.boardapi.dto;
 
 import lombok.*;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
 @Table
@@ -12,8 +11,6 @@ import org.springframework.data.relational.core.mapping.Table;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Category {
-    @Id
-    private Integer categoryId;
+public class InputCategory {
     private String categoryName;
 }

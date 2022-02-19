@@ -1,6 +1,7 @@
 package com.pangtudy.boardapi.router;
 
 import com.pangtudy.boardapi.dto.Category;
+import com.pangtudy.boardapi.dto.InputCategory;
 import com.pangtudy.boardapi.handler.CategoryHandler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -63,7 +64,7 @@ public class CategoryRouter {
                     operation = @Operation(operationId = "insertCategory", responses = {
                             @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Category.class))),
                             @ApiResponse(responseCode = "400", description = "Invalid Category details supplied")}
-                            , requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = Category.class)))
+                            , requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = InputCategory.class)))
                     )),
             @RouterOperation(path = "/board/categories", produces = {
                     MediaType.APPLICATION_JSON_VALUE},
@@ -75,10 +76,11 @@ public class CategoryRouter {
     })
     public RouterFunction<ServerResponse> categoryRoutes() {
         return RouterFunctions
-                .route(GET("/board/categories/{category_id}"), categoryHandler::read)
+                .route(POST("/board/categories"), categoryHandler::create)
+                .andRoute(GET("/board/categories"), categoryHandler::readAll)
+                .andRoute(GET("/board/categories/{category_id}"), categoryHandler::read)
                 .andRoute(PATCH("/board/categories/{category_id}"), categoryHandler::update)
                 .andRoute(DELETE("/board/categories/{category_id}"), categoryHandler::delete)
-                .andRoute(POST("/board/categories"), categoryHandler::create)
-                .andRoute(GET("/board/categories"), categoryHandler::readAll);
+                .andRoute(POST("/board/categories"), categoryHandler::create);
     }
 }
