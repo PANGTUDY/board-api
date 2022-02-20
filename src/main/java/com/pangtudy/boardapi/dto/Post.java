@@ -22,11 +22,9 @@ public class Post {
     private Integer categoryId;
     private String tags;
     private String title;
+    private String contents;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime date;
     private String writer;
     private Integer likes;
-    //private Content content;
-    //private Tag tag;
-    //private File file;
 }

@@ -14,6 +14,7 @@ CREATE TABLE POST
     category_id INT(20)      not null,
     tags        VARCHAR(256) not null,
     title       VARCHAR(50)  not null,
+    contents    VARCHAR(50)  not null,
     date        datetime     not null,
     writer      VARCHAR(50)  not null,
     likes       INT(20),

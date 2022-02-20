@@ -26,7 +26,15 @@ public class PostHandler {
     public Mono<ServerResponse> create(ServerRequest req) {
         Mono<InputPost> newPost = req.bodyToMono(InputPost.class);
         Mono<Post> savedPost = newPost
-                .flatMap(value -> Mono.just(new Post(null, value.getCategoryId(), value.getTags(), value.getTitle(), value.getDate(), value.getWriter(), 0)))
+                .flatMap(value -> Mono.just(Post.builder()
+                        .categoryId(value.getCategoryId())
+                        .tags(value.getTags())
+                        .title(value.getTitle())
+                        .contents(value.getContents())
+                        .date(value.getDate())
+                        .writer(value.getWriter())
+                        .build()
+                ))
                 .flatMap(category -> postRepository.save(category));
 
         return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(savedPost, Post.class));

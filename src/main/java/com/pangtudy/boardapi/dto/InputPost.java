@@ -18,6 +18,7 @@ public class InputPost {
     private Integer categoryId;
     private String tags;
     private String title;
+    private String contents;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime date;
     private String writer;
