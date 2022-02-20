@@ -49,7 +49,7 @@ public class CategoryRouter {
                             @ApiResponse(responseCode = "400", description = "Invalid Category ID supplied"),
                             @ApiResponse(responseCode = "404", description = "Category not found")}, parameters = {
                             @Parameter(in = ParameterIn.PATH, name = "category_id")}
-                            , requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = Category.class))))
+                            , requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = InputCategory.class))))
             ),
             @RouterOperation(path = "/board/categories/{category_id}", produces = {
                     MediaType.APPLICATION_JSON_VALUE}, method = RequestMethod.DELETE, beanClass = CategoryHandler.class, beanMethod = "delete"

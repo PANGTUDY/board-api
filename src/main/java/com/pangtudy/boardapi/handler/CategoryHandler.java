@@ -24,7 +24,7 @@ public class CategoryHandler {
     public Mono<ServerResponse> create(ServerRequest req) {
         Mono<InputCategory> newCategory = req.bodyToMono(InputCategory.class);
         Mono<Category> savedCategory = newCategory
-                .flatMap(value -> Mono.just(new Category(null, value.getCategoryName())))
+                .flatMap(value -> Mono.just(Category.builder().categoryName(value.getCategoryName()).build()))
                 .flatMap(category -> categoryRepository.save(category));
 
         return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(savedCategory, Category.class));
@@ -37,18 +37,17 @@ public class CategoryHandler {
 
     public Mono<ServerResponse> read(ServerRequest req) {
         int categoryId = Integer.valueOf(req.pathVariable("category_id"));
-        return categoryRepository.findById(categoryId)
-                .flatMap(category -> ok().contentType(APPLICATION_JSON).bodyValue(category))
-                .switchIfEmpty(ServerResponse.notFound().build());
+        Flux<Category> categories = categoryRepository.findByIdWithPosts(categoryId);
+        return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(categories, Category.class));
     }
 
     public Mono<ServerResponse> update(ServerRequest req) {
         int categoryId = Integer.valueOf(req.pathVariable("category_id"));
-        Mono<Category> newCategory = req.bodyToMono(Category.class).map(category -> {
-            category.setCategoryId(categoryId);
-            return category;
-        });
-        Mono<Category> savedCategory = newCategory.flatMap(category -> categoryRepository.save(category));
+        Mono<InputCategory> newCategory = req.bodyToMono(InputCategory.class);
+        Mono<Category> savedCategory = newCategory
+                .flatMap(value -> Mono.just(Category.builder().categoryId(categoryId).categoryName(value.getCategoryName()).build()))
+                .flatMap(category -> categoryRepository.save(category));
+
         return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(savedCategory, Category.class));
     }
 
