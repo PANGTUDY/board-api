@@ -45,9 +45,13 @@ public class CategoryHandler {
 
     public Mono<ServerResponse> update(ServerRequest req) {
         int categoryId = Integer.valueOf(req.pathVariable("category_id"));
+        Mono<Category> oldCategory = categoryRepository.findById(categoryId);
         Mono<InputCategory> newCategory = req.bodyToMono(InputCategory.class);
         Mono<Category> savedCategory = newCategory
-                .flatMap(value -> Mono.just(Category.builder().categoryId(categoryId).categoryName(value.getCategoryName()).build()))
+                .flatMap(value -> Mono.just(Category.builder()
+                        .categoryId(categoryId)
+                        .categoryName(value.getCategoryName())
+                        .build()))
                 .flatMap(category -> categoryRepository.save(category));
 
         return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(savedCategory, Category.class));

@@ -21,7 +21,7 @@ public class CustomCategoryRepositoryImpl implements CustomCategoryRepository {
         String query =
                 "SELECT " +
                 "c.category_id, c.category_name, " +
-                "p.post_id, p.category_id, p.tags, p.title, p.date, p.writer, p.likes, p.attached, " +
+                "p.post_id, p.category_id, p.tags, p.title, p.contents, p.date, p.writer, p.likes, " +
                 "FROM category as c " +
                 "LEFT OUTER JOIN post as p " +
                 "ON c.category_id = p.category_id " +
@@ -43,10 +43,10 @@ public class CustomCategoryRepositoryImpl implements CustomCategoryRepository {
                                                         .categoryId((Integer) row.get("category_id"))
                                                         .tags((String) row.get("tags"))
                                                         .title((String) row.get("title"))
+                                                        .contents((String) row.get("contents"))
                                                         .date((LocalDateTime) row.get("date"))
                                                         .writer((String) row.get("writer"))
                                                         .likes((Integer) row.get("likes"))
-                                                        //.attached((Integer) row.get("post_id"))
                                                         .build())
                                                 .collect(Collectors.toList())
                                 )
