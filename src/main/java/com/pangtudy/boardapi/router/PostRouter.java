@@ -52,7 +52,7 @@ public class PostRouter {
                                     @ApiResponse(responseCode = "404", description = "Post not found")},
                             parameters = {
                                     @Parameter(in = ParameterIn.PATH, name = "post_id")},
-                            requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = Post.class))))
+                            requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = InputPost.class))))
             ),
             @RouterOperation(path = "/board/posts/{post_id}", produces = {
                     MediaType.APPLICATION_JSON_VALUE},

@@ -2,11 +2,11 @@ package com.pangtudy.boardapi.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.relational.core.mapping.Table;
-
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Table
 @ToString
@@ -27,4 +27,7 @@ public class Post {
     private LocalDateTime date;
     private String writer;
     private Integer likes;
+
+    @Transient
+    private List<Comment> comments;
 }

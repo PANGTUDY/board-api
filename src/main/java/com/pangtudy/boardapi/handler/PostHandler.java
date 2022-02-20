@@ -45,29 +45,34 @@ public class PostHandler {
     public Mono<ServerResponse> readAll(ServerRequest req) {
         Optional<String> categoryId = req.queryParam("category_id");
         Flux<Post> posts;
-        Integer categoryNum= categoryId.map(Integer::valueOf).orElse(0);
-        if (categoryNum==0) posts = postRepository.findAll();
+        Integer categoryNum = categoryId.map(Integer::valueOf).orElse(0);
+        if (categoryNum == 0) posts = postRepository.findAll();
         else posts = postRepository.findPostByCategoryId(categoryNum);
         return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(posts, Post.class));
     }
 
     public Mono<ServerResponse> read(ServerRequest req) {
         int postId = Integer.valueOf(req.pathVariable("post_id"));
-        return postRepository.findById(postId)
-                //TODO : Content, File, Tag, Comment에서 값 가져와서 세팅하기
-                //.map(post->{post.setContent("GET CONTENT");return post;})
-                //.map(post->{post.setContent(fileRepository.findByPostId(postId));return post;})
-                .flatMap(post -> ok().contentType(APPLICATION_JSON).bodyValue(post))
-                .switchIfEmpty(ServerResponse.notFound().build());
+        Flux<Post> posts = postRepository.findPostByCategoryId(postId);
+        return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(posts, Post.class));
     }
 
     public Mono<ServerResponse> update(ServerRequest req) {
         int postId = Integer.valueOf(req.pathVariable("post_id"));
+        Mono<InputPost> newPost = req.bodyToMono(InputPost.class);
         Mono<Post> oldPost = postRepository.findById(postId);
-        Mono<Post> updatedPost = req.bodyToMono(Post.class).map(post -> {
-            post.setPostId(postId);
-            return post;
-        }).flatMap(post -> postRepository.save(post));
+        Mono<Post> updatedPost = newPost
+                .flatMap(value -> Mono.just(Post.builder()
+                        .postId(postId)
+                        .categoryId(value.getCategoryId())
+                        .tags(value.getTags())
+                        .title(value.getTitle())
+                        .contents(value.getContents())
+                        .date(value.getDate())
+                        .writer(value.getWriter())
+                        //TODO : likes 설정
+                        .build()))
+                .flatMap(post -> postRepository.save(post));
         return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(updatedPost, Post.class));
     }
 

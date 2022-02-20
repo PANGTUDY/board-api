@@ -30,7 +30,6 @@ CREATE TABLE COMMENT
     writer        VARCHAR(50)  not null,
     contents      VARCHAR(500) not null,
     date          datetime     not null,
-    modified_date datetime,
     FOREIGN KEY (post_id) REFERENCES POST (post_id) ON DELETE CASCADE
 );
 

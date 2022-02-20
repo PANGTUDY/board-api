@@ -23,6 +23,5 @@ public class Comment {
     private String contents;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime date;
-    private LocalDateTime modifiedDate;
     private Integer postId;
 }
