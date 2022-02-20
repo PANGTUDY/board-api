@@ -33,7 +33,7 @@ public class CommentRouter {
             @RouterOperation(path = "/board/posts/{post_id}/comments/{comment_id}", produces = {
                     MediaType.APPLICATION_JSON_VALUE},
                     beanClass = CommentHandler.class, method = RequestMethod.GET, beanMethod = "read",
-                    operation = @Operation(operationId = "getComment", responses = {
+                    operation = @Operation(summary = "특정 댓글 조회", operationId = "getComment", responses = {
                             @ApiResponse(responseCode = "200", description = "successful operation",
                                     content = @Content(schema = @Schema(implementation = Comment.class))),
                             @ApiResponse(responseCode = "400", description = "Invalid Comment details supplied")}, parameters = {
@@ -43,7 +43,7 @@ public class CommentRouter {
             @RouterOperation(path = "/board/posts/{post_id}/comments/{comment_id}"
                     , produces = {
                     MediaType.APPLICATION_JSON_VALUE}, method = RequestMethod.PATCH, beanClass = CommentHandler.class, beanMethod = "update",
-                    operation = @Operation(operationId = "updateComment", responses = {
+                    operation = @Operation(summary = "댓글 수정", operationId = "updateComment", responses = {
                             @ApiResponse(responseCode = "200", description = "successful operation",
                                     content = @Content(schema = @Schema(implementation = Comment.class))),
                             @ApiResponse(responseCode = "400", description = "Invalid Comment ID supplied"),
@@ -54,7 +54,7 @@ public class CommentRouter {
             ),
             @RouterOperation(path = "/board/posts/{post_id}/comments/{comment_id}", produces = {
                     MediaType.APPLICATION_JSON_VALUE}, method = RequestMethod.DELETE, beanClass = CommentHandler.class, beanMethod = "delete"
-                    , operation = @Operation(operationId = "deleteComment", responses = {
+                    , operation = @Operation(summary = "댓글 삭제", operationId = "deleteComment", responses = {
                     @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(mediaType = "Boolean")),
                     @ApiResponse(responseCode = "400", description = "Invalid Comment ID supplied"),
                     @ApiResponse(responseCode = "404", description = "Comment not found")}, parameters = {
@@ -63,7 +63,7 @@ public class CommentRouter {
             )),
             @RouterOperation(path = "/board/posts/{post_id}/comments", produces = {
                     MediaType.APPLICATION_JSON_VALUE}, method = RequestMethod.POST, beanClass = CommentHandler.class, beanMethod = "create",
-                    operation = @Operation(operationId = "insertComment", responses = {
+                    operation = @Operation(summary = "댓글 작성", operationId = "insertComment", responses = {
                             @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Comment.class))),
                             @ApiResponse(responseCode = "400", description = "Invalid Comment details supplied")}, parameters = {
                             @Parameter(in = ParameterIn.PATH, name = "post_id")}
@@ -72,7 +72,7 @@ public class CommentRouter {
             @RouterOperation(path = "/board/posts/{post_id}/comments", produces = {
                     MediaType.APPLICATION_JSON_VALUE},
                     beanClass = CommentHandler.class, method = RequestMethod.GET, beanMethod = "readAll",
-                    operation = @Operation(operationId = "getComments", responses = {
+                    operation = @Operation(summary = "전체 댓글 조회", operationId = "getComments", responses = {
                             @ApiResponse(responseCode = "200", description = "successful operation",
                                     content = @Content(schema = @Schema(implementation = Comment.class))),
                             @ApiResponse(responseCode = "400", description = "Invalid Comment details supplied")}, parameters = {

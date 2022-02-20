@@ -16,6 +16,7 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ok
 @Slf4j
 @Component
 @RequiredArgsConstructor
+//@Tag(name = "tag", description = "태그 API")
 public class TagHandler {
     private final TagRepository tagRepository;
 

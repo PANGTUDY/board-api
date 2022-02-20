@@ -3,6 +3,7 @@ package com.pangtudy.boardapi.handler;
 import com.pangtudy.boardapi.dto.InputPost;
 import com.pangtudy.boardapi.dto.Post;
 import com.pangtudy.boardapi.repository.PostRepository;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,7 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ok
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@Tag(name = "post", description = "게시글 API")
 public class PostHandler {
     private final PostRepository postRepository;
 

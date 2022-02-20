@@ -2,6 +2,7 @@ package com.pangtudy.boardapi.handler;
 
 import com.pangtudy.boardapi.dto.Comment;
 import com.pangtudy.boardapi.repository.CommentRepository;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -17,6 +18,7 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ok
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@Tag(name = "comment", description = "댓글 API")
 public class CommentHandler {
     private final CommentRepository commentRepository;
 

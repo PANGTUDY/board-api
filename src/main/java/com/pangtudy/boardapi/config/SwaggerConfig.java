@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SwaggerConfig
 {
+/*
     @Bean
     public GroupedOpenApi categoryGroupApi() {
         return GroupedOpenApi.builder()
@@ -55,7 +56,7 @@ public class SwaggerConfig
 //                .addOpenApiCustomiser(getOpenApiCustomiser())
                 .build();
     }
-
+*/
     public OpenApiCustomiser getOpenApiCustomiser() {
         return openAPI -> openAPI.getPaths().values().stream().flatMap(pathItem ->
                 pathItem.readOperations().stream())

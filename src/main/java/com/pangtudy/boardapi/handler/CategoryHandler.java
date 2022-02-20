@@ -3,6 +3,7 @@ package com.pangtudy.boardapi.handler;
 import com.pangtudy.boardapi.dto.Category;
 import com.pangtudy.boardapi.dto.InputCategory;
 import com.pangtudy.boardapi.repository.CategoryRepository;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,7 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ok
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@Tag(name = "category", description = "카테고리 API")
 public class CategoryHandler {
     private final CategoryRepository categoryRepository;
 

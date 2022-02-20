@@ -2,6 +2,7 @@ package com.pangtudy.boardapi.handler;
 
 import com.pangtudy.boardapi.dto.File;
 import com.pangtudy.boardapi.repository.FileRepository;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,7 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ok
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@Tag(name = "file", description = "파일 API")
 public class FileHandler {
     private final FileRepository fileRepository;
 
