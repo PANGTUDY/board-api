@@ -34,43 +34,55 @@ public class PostRouter {
             @RouterOperation(path = "/board/posts/{post_id}", produces = {
                     MediaType.APPLICATION_JSON_VALUE},
                     beanClass = PostHandler.class, method = RequestMethod.GET, beanMethod = "read",
-                    operation = @Operation(summary = "특정 게시글 조회", operationId = "getPost", responses = {
-                            @ApiResponse(responseCode = "200", description = "successful operation",
-                                    content = @Content(schema = @Schema(implementation = Post.class))),
-                            @ApiResponse(responseCode = "400", description = "Invalid Post details supplied")},
+                    operation = @Operation(summary = "특정 게시글 조회", operationId = "getPost",
+                            responses = {
+                                    @ApiResponse(responseCode = "200", description = "successful operation",
+                                            content = @Content(schema = @Schema(implementation = Post.class))),
+                                    @ApiResponse(responseCode = "400", description = "Invalid Post details supplied")},
                             parameters = {@Parameter(in = ParameterIn.PATH, name = "post_id")}
                     )),
-            @RouterOperation(path = "/board/posts/{post_id}"
-                    , produces = {
-                    MediaType.APPLICATION_JSON_VALUE}, method = RequestMethod.PATCH, beanClass = PostHandler.class, beanMethod = "update",
-                    operation = @Operation(summary = "게시글 수정", operationId = "updatePost", responses = {
-                            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Post.class))),
-                            @ApiResponse(responseCode = "400", description = "Invalid Post ID supplied"),
-                            @ApiResponse(responseCode = "404", description = "Post not found")}, parameters = {
-                            @Parameter(in = ParameterIn.PATH, name = "post_id")}
-                            , requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = Post.class))))
+            @RouterOperation(path = "/board/posts/{post_id}", produces = {
+                    MediaType.APPLICATION_JSON_VALUE},
+                    method = RequestMethod.PATCH, beanClass = PostHandler.class, beanMethod = "update",
+                    operation = @Operation(summary = "게시글 수정", operationId = "updatePost",
+                            responses = {
+                                    @ApiResponse(responseCode = "200", description = "successful operation",
+                                            content = @Content(schema = @Schema(implementation = Post.class))),
+                                    @ApiResponse(responseCode = "400", description = "Invalid Post ID supplied"),
+                                    @ApiResponse(responseCode = "404", description = "Post not found")},
+                            parameters = {
+                                    @Parameter(in = ParameterIn.PATH, name = "post_id")},
+                            requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = Post.class))))
             ),
             @RouterOperation(path = "/board/posts/{post_id}", produces = {
-                    MediaType.APPLICATION_JSON_VALUE}, method = RequestMethod.DELETE, beanClass = PostHandler.class, beanMethod = "delete"
-                    , operation = @Operation(summary = "게시글 삭제", operationId = "deletePost", responses = {
-                    @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(mediaType = "Boolean")),
-                    @ApiResponse(responseCode = "400", description = "Invalid Post ID supplied"),
-                    @ApiResponse(responseCode = "404", description = "Post not found")}, parameters = {
-                    @Parameter(in = ParameterIn.PATH, name = "post_id")}
-            )),
-            @RouterOperation(path = "/board/posts", produces = {
-                    MediaType.APPLICATION_JSON_VALUE}, method = RequestMethod.POST, beanClass = PostHandler.class, beanMethod = "create",
-                    operation = @Operation(summary = "게시글 작성", operationId = "insertPost", responses = {
-                            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Post.class))),
-                            @ApiResponse(responseCode = "400", description = "Invalid Post details supplied")}
-                            , requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = InputPost.class)))
+                    MediaType.APPLICATION_JSON_VALUE},
+                    method = RequestMethod.DELETE, beanClass = PostHandler.class, beanMethod = "delete",
+                    operation = @Operation(summary = "게시글 삭제", operationId = "deletePost",
+                            responses = {
+                                    @ApiResponse(responseCode = "200", description = "successful operation",
+                                            content = @Content(mediaType = "Boolean")),
+                                    @ApiResponse(responseCode = "400", description = "Invalid Post ID supplied"),
+                                    @ApiResponse(responseCode = "404", description = "Post not found")},
+                            parameters = {
+                                    @Parameter(in = ParameterIn.PATH, name = "post_id")}
                     )),
             @RouterOperation(path = "/board/posts", produces = {
                     MediaType.APPLICATION_JSON_VALUE},
-                    beanClass = PostHandler.class, method = RequestMethod.GET, beanMethod = "readAll",
-                    operation = @Operation(summary = "전체 게시글 조회", operationId = "getPosts", responses = {
-                            @ApiResponse(responseCode = "200", description = "successful operation",
-                                    content = @Content(schema = @Schema(implementation = Post.class)))},
+                    method = RequestMethod.POST, beanClass = PostHandler.class, beanMethod = "create",
+                    operation = @Operation(summary = "게시글 작성", operationId = "insertPost",
+                            responses = {
+                                    @ApiResponse(responseCode = "200", description = "successful operation",
+                                            content = @Content(schema = @Schema(implementation = Post.class))),
+                                    @ApiResponse(responseCode = "400", description = "Invalid Post details supplied")},
+                            requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = InputPost.class)))
+                    )),
+            @RouterOperation(path = "/board/posts", produces = {
+                    MediaType.APPLICATION_JSON_VALUE}, beanClass = PostHandler.class,
+                    method = RequestMethod.GET, beanMethod = "readAll",
+                    operation = @Operation(summary = "전체 게시글 조회", operationId = "getPosts",
+                            responses = {
+                                    @ApiResponse(responseCode = "200", description = "successful operation",
+                                            content = @Content(schema = @Schema(implementation = Post.class)))},
                             parameters = {@Parameter(name = "category_id", in = ParameterIn.QUERY, schema = @Schema(type = "Integer"))}
                     ))
     })
