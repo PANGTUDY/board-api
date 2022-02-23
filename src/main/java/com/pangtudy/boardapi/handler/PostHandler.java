@@ -53,7 +53,7 @@ public class PostHandler {
 
     public Mono<ServerResponse> read(ServerRequest req) {
         int postId = Integer.valueOf(req.pathVariable("post_id"));
-        Flux<Post> posts = postRepository.findPostByCategoryId(postId);
+        Flux<Post> posts = postRepository.findByIdWithComments(postId);
         return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(posts, Post.class));
     }
 
