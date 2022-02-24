@@ -39,7 +39,7 @@ public class CategoryHandler {
 
     public Mono<ServerResponse> read(ServerRequest req) {
         int categoryId = Integer.valueOf(req.pathVariable("category_id"));
-        Flux<Category> categories = categoryRepository.findByIdWithPosts(categoryId);
+        Mono<Category> categories = categoryRepository.findByIdWithPosts(categoryId);
         return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(categories, Category.class));
     }
 

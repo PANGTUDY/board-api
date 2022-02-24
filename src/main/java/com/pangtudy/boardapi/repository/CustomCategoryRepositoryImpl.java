@@ -5,7 +5,7 @@ import com.pangtudy.boardapi.dto.Post;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 import org.springframework.stereotype.Repository;
-import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
@@ -17,10 +17,10 @@ public class CustomCategoryRepositoryImpl implements CustomCategoryRepository {
     private final R2dbcEntityTemplate r2dbcEntityTemplate;
 
     @Override
-    public Flux<Category> findByIdWithPosts(Integer id) {
+    public Mono<Category> findByIdWithPosts(Integer id) {
         String query =
                 "SELECT " +
-                "c.category_id, c.category_name, " +
+                "c.category_id as c_category_id, c.category_name, " +
                 "p.post_id, p.category_id, p.tags, p.title, p.contents, p.date, p.writer, p.likes, " +
                 "FROM category as c " +
                 "LEFT OUTER JOIN post as p " +
@@ -31,10 +31,10 @@ public class CustomCategoryRepositoryImpl implements CustomCategoryRepository {
                 .bind("id",id)
                 .fetch()
                 .all()
-                .bufferUntilChanged(result -> result.get("category_id"))
+                .bufferUntilChanged(result -> result.get("c_category_id"))
                 .map(rows ->
                         Category.builder()
-                                .categoryId((Integer) rows.get(0).get("category_id"))
+                                .categoryId((Integer) rows.get(0).get("c_category_id"))
                                 .categoryName(String.valueOf(rows.get(0).get("category_name")))
                                 .posts(
                                         rows.stream()
@@ -51,6 +51,6 @@ public class CustomCategoryRepositoryImpl implements CustomCategoryRepository {
                                                 .collect(Collectors.toList())
                                 )
                                 .build()
-                );
+                ).single();
     }
 }
