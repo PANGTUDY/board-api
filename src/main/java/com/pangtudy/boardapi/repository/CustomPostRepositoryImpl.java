@@ -1,5 +1,6 @@
 package com.pangtudy.boardapi.repository;
 
+import com.pangtudy.boardapi.dto.Category;
 import com.pangtudy.boardapi.dto.Comment;
 import com.pangtudy.boardapi.dto.Post;
 import lombok.RequiredArgsConstructor;
@@ -54,6 +55,29 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
                                                 .collect(Collectors.toList())
                                 )
                                 .build()
-                ).single();
+                )
+                .map(post -> {
+                    if (post.getComments().get(0).getCommentId() == null) post.setComments(null);
+                    return post;
+                })
+                .flatMap(post -> {
+                    String query2 = "SELECT " +
+                            "p.post_id as p_post_id, p.category_id, p.tags, p.title, p.contents as p_contents, p.date as p_date, p.writer as p_writer, p.likes, " +
+                            "c.category_id as c_category_id, c.category_name, " +
+                            "FROM post as p " +
+                            "LEFT OUTER JOIN category as c " +
+                            "ON p.category_id = c.category_id " +
+                            "WHERE p.category_id = :id";
+
+                    return r2dbcEntityTemplate.getDatabaseClient().sql(query2)
+                            .bind("id", post.getCategoryId())
+                            .fetch()
+                            .all()
+                            .bufferUntilChanged(result -> result.get("c_category_id"))
+                            .map(p -> {
+                                post.setCategory(Category.builder().categoryId((Integer) p.get(0).get("c_category_id")).categoryName((String) p.get(0).get("category_name")).build());
+                                return post;
+                            }).single();
+                }).single();
     }
 }

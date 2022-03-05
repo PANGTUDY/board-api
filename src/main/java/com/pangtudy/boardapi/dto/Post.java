@@ -29,5 +29,7 @@ public class Post {
     private Integer likes;
 
     @Transient
+    private Category category;
+    @Transient
     private List<Comment> comments;
 }

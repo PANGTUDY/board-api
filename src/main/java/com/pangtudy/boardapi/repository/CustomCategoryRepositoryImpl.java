@@ -51,6 +51,10 @@ public class CustomCategoryRepositoryImpl implements CustomCategoryRepository {
                                                 .collect(Collectors.toList())
                                 )
                                 .build()
-                ).single();
+                )
+                .map(category -> {
+                    if (category.getPosts().get(0).getCategoryId() == null) category.setPosts(null);
+                    return category;
+                }).single();
     }
 }
