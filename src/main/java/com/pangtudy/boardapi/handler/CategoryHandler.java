@@ -39,8 +39,8 @@ public class CategoryHandler {
 
     public Mono<ServerResponse> read(ServerRequest req) {
         int categoryId = Integer.valueOf(req.pathVariable("category_id"));
-        Mono<Category> categories = categoryRepository.findByIdWithPosts(categoryId);
-        return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(categories, Category.class));
+        Mono<Category> category = categoryRepository.findByIdWithPosts(categoryId);
+        return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(category, Category.class));
     }
 
     public Mono<ServerResponse> update(ServerRequest req) {

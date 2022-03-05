@@ -18,7 +18,6 @@ import java.time.LocalDateTime;
 public class Comment {
     @Id
     private Integer commentId;
-    private Integer followId;
     private String writer;
     private String contents;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")

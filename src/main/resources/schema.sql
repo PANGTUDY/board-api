@@ -18,7 +18,6 @@ CREATE TABLE POST
     date        datetime     not null,
     writer      VARCHAR(50)  not null,
     likes       INT(20),
-    attached    VARCHAR(200),
     FOREIGN KEY (category_id) REFERENCES CATEGORY (category_id) ON DELETE CASCADE
 );
 
@@ -33,13 +32,6 @@ CREATE TABLE COMMENT
     FOREIGN KEY (post_id) REFERENCES POST (post_id) ON DELETE CASCADE
 );
 
-CREATE TABLE CONTENT
-(
-    post_id  INT(20),
-    contents VARCHAR(10000) not null,
-    FOREIGN KEY (post_id) REFERENCES POST (post_id) ON DELETE CASCADE
-);
-
 CREATE TABLE FILE
 (
     post_id   INT(20),
@@ -49,7 +41,6 @@ CREATE TABLE FILE
     file_type VARCHAR(50)  not null,
     FOREIGN KEY (post_id) REFERENCES POST (post_id) ON DELETE CASCADE
 );
-
 
 CREATE TABLE TAG
 (
