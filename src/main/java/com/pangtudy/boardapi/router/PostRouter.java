@@ -87,7 +87,8 @@ public class PostRouter {
                             parameters = {
                                     @Parameter(name = "category_id", in = ParameterIn.QUERY, schema = @Schema(type = "Integer")),
                                     @Parameter(name = "writer", in = ParameterIn.QUERY, schema = @Schema(type = "String")),
-                                    @Parameter(name = "title", in = ParameterIn.QUERY, schema = @Schema(type = "String"))}
+                                    @Parameter(name = "title", in = ParameterIn.QUERY, schema = @Schema(type = "String")),
+                                    @Parameter(name = "contents", in = ParameterIn.QUERY, schema = @Schema(type = "String"))}
                     ))
     })
     @Bean

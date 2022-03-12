@@ -46,10 +46,12 @@ public class PostHandler {
         Optional<String> categoryId = req.queryParam("category_id");
         Optional<String> writer = req.queryParam("writer");
         Optional<String> title = req.queryParam("title");
+        Optional<String> contents = req.queryParam("contents");
         Flux<Post> posts;
         Integer categoryNum = categoryId.map(Integer::valueOf).orElse(0);
         String writerName = writer.map(String::valueOf).orElse("");
         String titleString = title.map(String::valueOf).orElse("");
+        String contentsString = contents.map(String::valueOf).orElse("");
 
         if (categoryNum != 0)
             posts = postRepository.findPostByCategoryId(categoryNum);
@@ -57,6 +59,8 @@ public class PostHandler {
             posts = postRepository.findPostByWriter(writerName);
         else if (titleString != "")
             posts = postRepository.findPostByTitleContains(titleString);
+        else if (contentsString != "")
+            posts = postRepository.findPostByTitleAndContentsContains(contentsString);
         else
             posts = postRepository.findAll();
         return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(posts, Post.class));

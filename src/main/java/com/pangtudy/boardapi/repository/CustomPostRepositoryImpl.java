@@ -89,4 +89,10 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
         return r2dbcEntityTemplate.select(Post.class)
                 .matching(query(where("title").like("%" + title + "%"))).all();
     }
+
+    @Override
+    public Flux<Post> findPostByTitleAndContentsContains(String contents) {
+        return r2dbcEntityTemplate.select(Post.class)
+                .matching(query(where("title").like("%" + contents + "%").or("contents").like("%" + contents + "%"))).all();
+    }
 }
