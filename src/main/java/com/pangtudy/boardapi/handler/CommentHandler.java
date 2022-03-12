@@ -1,6 +1,9 @@
 package com.pangtudy.boardapi.handler;
 
 import com.pangtudy.boardapi.dto.Comment;
+import com.pangtudy.boardapi.dto.InputComment;
+import com.pangtudy.boardapi.dto.InputPost;
+import com.pangtudy.boardapi.dto.Post;
 import com.pangtudy.boardapi.repository.CommentRepository;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -23,20 +26,31 @@ public class CommentHandler {
     private final CommentRepository commentRepository;
 
     public Mono<ServerResponse> create(ServerRequest req) {
-        Mono<Comment> savedPost = req.bodyToMono(Comment.class).flatMap(comment -> commentRepository.save(comment));
-        return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(savedPost, Comment.class));
+        int postId = Integer.valueOf(req.pathVariable("post_id"));
+        Mono<InputComment> newComment = req.bodyToMono(InputComment.class);
+        Mono<Comment> savedComment = newComment
+                .flatMap(value -> Mono.just(Comment.builder()
+                        .writer(value.getWriter())
+                        .writer(value.getWriter())
+                        .contents(value.getContents())
+                        .date(value.getDate())
+                        .postId(postId)
+                        .build()
+                ))
+                .flatMap(comment -> commentRepository.save(comment));
+        return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(savedComment, Comment.class));
     }
 
     public Mono<ServerResponse> readAll(ServerRequest req) {
-        Flux<Comment> comments = commentRepository.findAll();
+        int postId = Integer.valueOf(req.pathVariable("post_id"));
+        Flux<Comment> comments = commentRepository.findCommentByPostId(postId);
         return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(comments, Comment.class));
     }
 
     public Mono<ServerResponse> read(ServerRequest req) {
         int postId = Integer.valueOf(req.pathVariable("post_id"));
         int commentId = Integer.valueOf(req.pathVariable("comment_id"));
-        //TODO : postId로 post가져오고 commentId로 comment가져오기
-        return commentRepository.findById(postId)
+        return commentRepository.findCommentByPostIdAndCommentId(postId, commentId)
                 .flatMap(post -> ok().contentType(APPLICATION_JSON).bodyValue(post))
                 .switchIfEmpty(ServerResponse.notFound().build());
     }
@@ -44,20 +58,26 @@ public class CommentHandler {
     public Mono<ServerResponse> update(ServerRequest req) {
         int postId = Integer.valueOf(req.pathVariable("post_id"));
         int commentId = Integer.valueOf(req.pathVariable("comment_id"));
-        //TODO : postId로 post가져오고 commentId로 comment가져오기
+        Mono<InputComment> newComment = req.bodyToMono(InputComment.class);
 
-        Mono<Comment> newComment = req.bodyToMono(Comment.class).map(comment -> {
-            comment.setCommentId(postId);
-            return comment;
-        });
-        Mono<Comment> savedComment = newComment.flatMap(post -> commentRepository.save(post));
+        Mono<Comment> oldComment = commentRepository.findCommentByPostIdAndCommentId(postId, commentId);
+        Mono<Comment> savedComment = newComment
+                .flatMap(value -> Mono.just(Comment.builder()
+                        .writer(value.getWriter())
+                        .writer(value.getWriter())
+                        .contents(value.getContents())
+                        .date(value.getDate())
+                        .postId(postId)
+                        .commentId(commentId)
+                        .build()
+                ))
+                .flatMap(comment -> commentRepository.save(comment));
         return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(savedComment, Comment.class));
     }
 
     public Mono<ServerResponse> delete(ServerRequest req) {
         int postId = Integer.valueOf(req.pathVariable("post_id"));
         int commentId = Integer.valueOf(req.pathVariable("comment_id"));
-        Mono<Comment> oldComment = commentRepository.findById(commentId);
         return ok().build(commentRepository.deleteById(commentId));
     }
 }

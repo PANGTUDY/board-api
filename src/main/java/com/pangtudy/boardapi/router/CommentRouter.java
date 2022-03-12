@@ -1,6 +1,7 @@
 package com.pangtudy.boardapi.router;
 
 import com.pangtudy.boardapi.dto.Comment;
+import com.pangtudy.boardapi.dto.InputComment;
 import com.pangtudy.boardapi.handler.CommentHandler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -54,7 +55,7 @@ public class CommentRouter {
                             parameters = {
                                     @Parameter(in = ParameterIn.PATH, name = "post_id"),
                                     @Parameter(in = ParameterIn.PATH, name = "comment_id")},
-                            requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = Comment.class))))
+                            requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = InputComment.class))))
             ),
             @RouterOperation(path = "/board/posts/{post_id}/comments/{comment_id}", produces = {
                     MediaType.APPLICATION_JSON_VALUE},
@@ -78,13 +79,13 @@ public class CommentRouter {
                                     @ApiResponse(responseCode = "400", description = "Invalid Comment details supplied")},
                             parameters = {
                                     @Parameter(in = ParameterIn.PATH, name = "post_id")},
-                            requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = Comment.class)))
+                            requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = InputComment.class)))
                     )),
             @RouterOperation(path = "/board/posts/{post_id}/comments", produces = {
                     MediaType.APPLICATION_JSON_VALUE},
                     beanClass = CommentHandler.class,
                     method = RequestMethod.GET, beanMethod = "readAll",
-                    operation = @Operation(summary = "전체 댓글 조회", operationId = "getComments",
+                    operation = @Operation(summary = "게시글 댓글 조회", operationId = "getComments",
                             responses = {
                                     @ApiResponse(responseCode = "200", description = "successful operation",
                                             content = @Content(schema = @Schema(implementation = Comment.class))),
