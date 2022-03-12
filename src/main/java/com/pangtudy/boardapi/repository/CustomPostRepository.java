@@ -5,4 +5,5 @@ import reactor.core.publisher.Mono;
 
 public interface CustomPostRepository {
     Mono<Post> findByIdWithComments(Integer id);
+    Flux<Post> findPostByTitleContains(String title);
 }

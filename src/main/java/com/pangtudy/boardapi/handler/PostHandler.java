@@ -44,10 +44,21 @@ public class PostHandler {
 
     public Mono<ServerResponse> readAll(ServerRequest req) {
         Optional<String> categoryId = req.queryParam("category_id");
+        Optional<String> writer = req.queryParam("writer");
+        Optional<String> title = req.queryParam("title");
         Flux<Post> posts;
         Integer categoryNum = categoryId.map(Integer::valueOf).orElse(0);
-        if (categoryNum == 0) posts = postRepository.findAll();
-        else posts = postRepository.findPostByCategoryId(categoryNum);
+        String writerName = writer.map(String::valueOf).orElse("");
+        String titleString = title.map(String::valueOf).orElse("");
+
+        if (categoryNum != 0)
+            posts = postRepository.findPostByCategoryId(categoryNum);
+        else if (writerName != "")
+            posts = postRepository.findPostByWriter(writerName);
+        else if (titleString != "")
+            posts = postRepository.findPostByTitleContains(titleString);
+        else
+            posts = postRepository.findAll();
         return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(posts, Post.class));
     }
 

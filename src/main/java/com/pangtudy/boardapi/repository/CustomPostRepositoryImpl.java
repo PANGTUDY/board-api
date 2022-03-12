@@ -11,6 +11,9 @@ import reactor.core.publisher.Mono;
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
+import static org.springframework.data.relational.core.query.Criteria.where;
+import static org.springframework.data.relational.core.query.Query.query;
+
 @Repository
 @RequiredArgsConstructor
 public class CustomPostRepositoryImpl implements CustomPostRepository {
@@ -47,7 +50,6 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
                                                 .map(row -> Comment.builder()
                                                         .commentId((Integer) row.get("comment_id"))
                                                         .postId((Integer) row.get("post_id"))
-                                                        .followId((Integer) row.get("follow_id"))
                                                         .writer((String) row.get("writer"))
                                                         .contents((String) row.get("contents"))
                                                         .date((LocalDateTime) row.get("date"))

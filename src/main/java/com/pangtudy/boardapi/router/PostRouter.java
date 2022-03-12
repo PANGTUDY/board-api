@@ -39,7 +39,8 @@ public class PostRouter {
                                     @ApiResponse(responseCode = "200", description = "successful operation",
                                             content = @Content(schema = @Schema(implementation = Post.class))),
                                     @ApiResponse(responseCode = "400", description = "Invalid Post details supplied")},
-                            parameters = {@Parameter(in = ParameterIn.PATH, name = "post_id")}
+                            parameters = {
+                                    @Parameter(in = ParameterIn.PATH, name = "post_id")}
                     )),
             @RouterOperation(path = "/board/posts/{post_id}", produces = {
                     MediaType.APPLICATION_JSON_VALUE},
@@ -83,7 +84,10 @@ public class PostRouter {
                             responses = {
                                     @ApiResponse(responseCode = "200", description = "successful operation",
                                             content = @Content(schema = @Schema(implementation = Post.class)))},
-                            parameters = {@Parameter(name = "category_id", in = ParameterIn.QUERY, schema = @Schema(type = "Integer"))}
+                            parameters = {
+                                    @Parameter(name = "category_id", in = ParameterIn.QUERY, schema = @Schema(type = "Integer")),
+                                    @Parameter(name = "writer", in = ParameterIn.QUERY, schema = @Schema(type = "String")),
+                                    @Parameter(name = "title", in = ParameterIn.QUERY, schema = @Schema(type = "String"))}
                     ))
     })
     @Bean
