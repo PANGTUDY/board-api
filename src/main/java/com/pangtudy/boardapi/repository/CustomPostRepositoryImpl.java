@@ -6,6 +6,7 @@ import com.pangtudy.boardapi.dto.Post;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 import org.springframework.stereotype.Repository;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
@@ -81,5 +82,11 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
                                 return post;
                             }).single();
                 }).single();
+    }
+
+    @Override
+    public Flux<Post> findPostByTitleContains(String title) {
+        return r2dbcEntityTemplate.select(Post.class)
+                .matching(query(where("title").like("%" + title + "%"))).all();
     }
 }
