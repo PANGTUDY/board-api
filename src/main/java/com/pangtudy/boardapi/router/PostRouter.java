@@ -42,6 +42,18 @@ public class PostRouter {
                             parameters = {
                                     @Parameter(in = ParameterIn.PATH, name = "post_id")}
                     )),
+            @RouterOperation(path = "/board/posts/adjacent/{category_id}/{post_id}", produces = {
+                    MediaType.APPLICATION_JSON_VALUE},
+                    beanClass = PostHandler.class, method = RequestMethod.GET, beanMethod = "readAdjacent",
+                    operation = @Operation(summary = "앞 뒤 게시글 조회", operationId = "getAdjacentPosts",
+                            responses = {
+                                    @ApiResponse(responseCode = "200", description = "successful operation",
+                                            content = @Content(schema = @Schema(implementation = Post.class))),
+                                    @ApiResponse(responseCode = "400", description = "Invalid Post details supplied")},
+                            parameters = {
+                                    @Parameter(in = ParameterIn.PATH, name = "category_id"),
+                                    @Parameter(in = ParameterIn.PATH, name = "post_id")}
+                    )),
             @RouterOperation(path = "/board/posts/{post_id}", produces = {
                     MediaType.APPLICATION_JSON_VALUE},
                     method = RequestMethod.PATCH, beanClass = PostHandler.class, beanMethod = "update",
@@ -95,6 +107,7 @@ public class PostRouter {
     public RouterFunction<ServerResponse> postRoutes() {
         return RouterFunctions
                 .route(GET("/board/posts/{post_id}"), postHandler::read)
+                .andRoute(GET("/board/posts/adjacent/{category_id}/{post_id}"), postHandler::readAdjacent)
                 .andRoute(PATCH("/board/posts/{post_id}"), postHandler::update)
                 .andRoute(DELETE("/board/posts/{post_id}"), postHandler::delete)
 //                .andRoute(GET("/board/posts/page"), postHandler.readSelectedPage)

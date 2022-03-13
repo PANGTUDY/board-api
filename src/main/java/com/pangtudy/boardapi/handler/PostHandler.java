@@ -72,6 +72,13 @@ public class PostHandler {
         return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(posts, Post.class));
     }
 
+    public Mono<ServerResponse> readAdjacent(ServerRequest req) {
+        int categoryId = Integer.valueOf(req.pathVariable("category_id"));
+        int postId = Integer.valueOf(req.pathVariable("post_id"));
+        Flux<Post> posts = postRepository.findAdjacentPosts(categoryId, postId);
+        return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(posts, Post.class));
+    }
+
     public Mono<ServerResponse> update(ServerRequest req) {
         int postId = Integer.valueOf(req.pathVariable("post_id"));
         Mono<InputPost> newPost = req.bodyToMono(InputPost.class);
