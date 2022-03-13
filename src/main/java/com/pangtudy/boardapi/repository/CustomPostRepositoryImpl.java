@@ -99,4 +99,25 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
         return r2dbcEntityTemplate.select(Post.class)
                 .matching(query(where("title").like("%" + contents + "%").or("contents").like("%" + contents + "%"))).all();
     }
+
+    @Override
+    public Flux<Post> findPostByTagContains(String tag) {
+        return r2dbcEntityTemplate.select(Post.class)
+                .matching(query(where("tags").like("%" + tag + "%"))).all();
+    }
+
+    @Override
+    public Flux<Post> findAdjacentPosts(Integer categoryId, Integer postId) {
+        Flux<Post> beforePosts = r2dbcEntityTemplate.select(Post.class)
+                .matching(Query.query(where("post_id").lessThan(postId)
+                        .and(where("category_id")
+                                .is(categoryId)))
+                        .sort(by(desc("post_id"))).limit(1)).all();
+        Flux<Post> afterPosts = r2dbcEntityTemplate.select(Post.class)
+                .matching(Query.query(where("post_id").greaterThan(postId)
+                        .and(where("category_id")
+                                .is(categoryId)))
+                        .sort(by(asc("post_id"))).limit(1)).all();
+        return Flux.merge(beforePosts, afterPosts);
+    }
 }
