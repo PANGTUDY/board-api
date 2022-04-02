@@ -89,19 +89,33 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
     }
 
     @Override
-    public Flux<Post> findPostByTitleContains(String title) {
-        return r2dbcEntityTemplate.select(Post.class)
+    public Flux<Post> findPostByWriter(Integer categoryId, String writer) {
+        if (categoryId != 0) return r2dbcEntityTemplate.select(Post.class)
+                .matching(query(where("writer").like("%" + writer + "%").and(where("category_id").is(categoryId)))).all();
+        else return r2dbcEntityTemplate.select(Post.class)
+                .matching(query(where("writer").like("%" + writer + "%"))).all();
+    }
+
+    @Override
+    public Flux<Post> findPostByTitleContains(Integer categoryId, String title) {
+        if (categoryId != 0) return r2dbcEntityTemplate.select(Post.class)
+                .matching(query(where("title").like("%" + title + "%").and(where("category_id").is(categoryId)))).all();
+        else return r2dbcEntityTemplate.select(Post.class)
                 .matching(query(where("title").like("%" + title + "%"))).all();
     }
 
     @Override
-    public Flux<Post> findPostByTitleAndContentsContains(String contents) {
-        return r2dbcEntityTemplate.select(Post.class)
+    public Flux<Post> findPostByTitleAndContentsContains(Integer categoryId, String contents) {
+        if (categoryId != 0) return r2dbcEntityTemplate.select(Post.class)
+                .matching(query(where("title").like("%" + contents + "%").and(where("category_id").is(categoryId)))).all();
+        else return r2dbcEntityTemplate.select(Post.class)
                 .matching(query(where("title").like("%" + contents + "%").or("contents").like("%" + contents + "%"))).all();
     }
 
     @Override
-    public Flux<Post> findPostByTagContains(String tag) {
+    public Flux<Post> findPostByTagContains(Integer categoryId, String tag) {
+        if (categoryId != 0) return r2dbcEntityTemplate.select(Post.class)
+                .matching(query(where("tags").like("%" + tag + "%").and(where("category_id").is(categoryId)))).all();
         return r2dbcEntityTemplate.select(Post.class)
                 .matching(query(where("tags").like("%" + tag + "%"))).all();
     }

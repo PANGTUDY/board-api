@@ -55,16 +55,16 @@ public class PostHandler {
         String contentsString = contents.map(String::valueOf).orElse("");
         String tagString = tag.map(String::valueOf).orElse("");
 
-        if (categoryNum != 0)
-            posts = postRepository.findPostByCategoryId(categoryNum);
-        else if (writerName != "")
-            posts = postRepository.findPostByWriter(writerName);
+        if (writerName != "")
+            posts = postRepository.findPostByWriter(categoryNum, writerName);
         else if (titleString != "")
-            posts = postRepository.findPostByTitleContains(titleString);
+            posts = postRepository.findPostByTitleContains(categoryNum, titleString);
         else if (contentsString != "")
-            posts = postRepository.findPostByTitleAndContentsContains(contentsString);
+            posts = postRepository.findPostByTitleAndContentsContains(categoryNum, contentsString);
         else if (tagString != "")
-            posts = postRepository.findPostByTagContains(tagString);
+            posts = postRepository.findPostByTagContains(categoryNum, tagString);
+        else if (categoryNum != 0)
+            posts = postRepository.findPostByCategoryId(categoryNum);
         else
             posts = postRepository.findAll();
         return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(posts, Post.class));

@@ -6,5 +6,4 @@ import reactor.core.publisher.Flux;
 
 public interface PostRepository extends ReactiveCrudRepository<Post, Integer> , CustomPostRepository{
     Flux<Post> findPostByCategoryId(Integer categoryId);
-    Flux<Post> findPostByWriter(String writer);
 }
