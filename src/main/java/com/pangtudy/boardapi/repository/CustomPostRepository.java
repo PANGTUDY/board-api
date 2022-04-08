@@ -6,6 +6,7 @@ import reactor.core.publisher.Mono;
 
 public interface CustomPostRepository {
     Mono<Post> findByIdWithComments(Integer id);
+    Mono<Integer> updatePostLike(Integer id, Integer likes);
     Flux<Post> findPostByWriter(Integer categoryId, String writer);
     Flux<Post> findPostByTitleContains(Integer categoryId, String title);
     Flux<Post> findPostByTitleAndContentsContains(Integer categoryId, String contents);

@@ -1,6 +1,8 @@
 package com.pangtudy.boardapi.router;
 
 import com.pangtudy.boardapi.dto.InputPost;
+import com.pangtudy.boardapi.dto.InputUser;
+import com.pangtudy.boardapi.dto.Likes;
 import com.pangtudy.boardapi.dto.Post;
 import com.pangtudy.boardapi.handler.PostHandler;
 import io.swagger.v3.oas.annotations.Operation;
@@ -41,6 +43,18 @@ public class PostRouter {
                                     @ApiResponse(responseCode = "400", description = "Invalid Post details supplied")},
                             parameters = {
                                     @Parameter(in = ParameterIn.PATH, name = "post_id")}
+                    )),
+            @RouterOperation(path = "/board/posts/{post_id}/like", produces = {
+                    MediaType.APPLICATION_JSON_VALUE},
+                    beanClass = PostHandler.class, method = RequestMethod.POST, beanMethod = "updateLikes",
+                    operation = @Operation(summary = "좋아요 상태 변경", operationId = "updateLikes",
+                            responses = {
+                                    @ApiResponse(responseCode = "200", description = "successful operation",
+                                            content = @Content(schema = @Schema(implementation = Likes.class))),
+                                    @ApiResponse(responseCode = "400", description = "Invalid Post details supplied")},
+                            parameters = {
+                                    @Parameter(in = ParameterIn.PATH, name = "post_id")},
+                            requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = InputUser.class)))
                     )),
             @RouterOperation(path = "/board/posts/adjacent/{category_id}/{post_id}", produces = {
                     MediaType.APPLICATION_JSON_VALUE},
@@ -92,7 +106,7 @@ public class PostRouter {
             @RouterOperation(path = "/board/posts", produces = {
                     MediaType.APPLICATION_JSON_VALUE}, beanClass = PostHandler.class,
                     method = RequestMethod.GET, beanMethod = "readAll",
-                    operation = @Operation(summary = "전체 게시글 조회", operationId = "getPosts",
+                    operation = @Operation(summary = "게시글 조회", operationId = "getPosts",
                             responses = {
                                     @ApiResponse(responseCode = "200", description = "successful operation",
                                             content = @Content(schema = @Schema(implementation = Post.class)))},
@@ -108,11 +122,11 @@ public class PostRouter {
     public RouterFunction<ServerResponse> postRoutes() {
         return RouterFunctions
                 .route(GET("/board/posts/{post_id}"), postHandler::read)
+                .andRoute(POST("/board/posts/{post_id}/like"), postHandler::updateLikes)
                 .andRoute(GET("/board/posts/adjacent/{category_id}/{post_id}"), postHandler::readAdjacent)
                 .andRoute(PATCH("/board/posts/{post_id}"), postHandler::update)
                 .andRoute(DELETE("/board/posts/{post_id}"), postHandler::delete)
 //                .andRoute(GET("/board/posts/page"), postHandler.readSelectedPage)
-//                .andRoute(GET("/board/posts/search"), postHandler.readAndSearch)
                 .andRoute(POST("/board/posts"), postHandler::create)
                 .andRoute(GET("/board/posts"), postHandler::readAll);
     }

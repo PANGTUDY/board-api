@@ -1,7 +1,10 @@
 package com.pangtudy.boardapi.handler;
 
 import com.pangtudy.boardapi.dto.InputPost;
+import com.pangtudy.boardapi.dto.InputUser;
+import com.pangtudy.boardapi.dto.Likes;
 import com.pangtudy.boardapi.dto.Post;
+import com.pangtudy.boardapi.repository.LikesRepository;
 import com.pangtudy.boardapi.repository.PostRepository;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +27,7 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ok
 @Tag(name = "post", description = "게시글 API")
 public class PostHandler {
     private final PostRepository postRepository;
+    private final LikesRepository likesRepository;
 
     public Mono<ServerResponse> create(ServerRequest req) {
         Mono<InputPost> newPost = req.bodyToMono(InputPost.class);
@@ -35,6 +39,7 @@ public class PostHandler {
                         .contents(value.getContents())
                         .date(value.getDate())
                         .writer(value.getWriter())
+                        .likes(0)
                         .build()
                 ))
                 .flatMap(category -> postRepository.save(category));
@@ -96,10 +101,37 @@ public class PostHandler {
                         .contents(value.getContents())
                         .date(value.getDate())
                         .writer(value.getWriter())
-                        //TODO : likes 설정
                         .build()))
                 .flatMap(post -> postRepository.save(post));
         return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(updatedPost, Post.class));
+    }
+
+    public Mono<ServerResponse> updateLikes(ServerRequest req) {
+        int postId = Integer.parseInt(req.pathVariable("post_id"));
+        Mono<InputUser> user = req.bodyToMono(InputUser.class);
+
+        Flux<Likes> postLikeList = likesRepository.findByPostId(postId);
+        //postLikeList에 userId가 존재하면(=이미 좋아요한 상태) delete
+        //없으면 insert
+/*
+        final Integer[] userId = new Integer[1];
+        user.subscribe(u -> {
+            userId[0] = u.getUserId();
+        });
+
+        Flux<Likes> postLikeList = likesRepository.findByPostId(postId);
+        Mono<Likes> postLike = postLikeList.filter(likes -> likes.getUserId().equals(userId[0])).single();
+        postLike.map(likes -> {
+            if (likes.getUserId() == null) {
+                Mono<Likes> likesMono = likesRepository.insertUserId(postId, userId[0]);
+            } else {
+                Mono<Integer> updatedRowCount = likesRepository.deleteByPostIdAndUserId(postId, userId[0]);
+            }
+            return null;
+        });
+
+        return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(likesMono, Post.class));*/
+        return null;
     }
 
     public Mono<ServerResponse> delete(ServerRequest req) {

@@ -14,9 +14,9 @@ CREATE TABLE POST
     category_id INT(20)      not null,
     tags        VARCHAR(256) not null,
     title       VARCHAR(50)  not null,
-    contents    VARCHAR(50)  not null,
+    contents    VARCHAR(500)  not null,
     date        datetime     not null,
-    writer      VARCHAR(50)  not null,
+    writer      VARCHAR(20)  not null,
     likes       INT(20),
     FOREIGN KEY (category_id) REFERENCES CATEGORY (category_id) ON DELETE CASCADE
 );
@@ -26,8 +26,8 @@ CREATE TABLE COMMENT
     comment_id    INT(20) AUTO_INCREMENT PRIMARY KEY,
     post_id       INT(20)      not null,
     follow_id     INT(20),
-    writer        VARCHAR(50)  not null,
-    contents      VARCHAR(500) not null,
+    writer        VARCHAR(20)  not null,
+    contents      VARCHAR(100) not null,
     date          datetime     not null,
     FOREIGN KEY (post_id) REFERENCES POST (post_id) ON DELETE CASCADE
 );
@@ -42,9 +42,9 @@ CREATE TABLE FILE
     FOREIGN KEY (post_id) REFERENCES POST (post_id) ON DELETE CASCADE
 );
 
-CREATE TABLE TAG
+CREATE TABLE LIKES
 (
-    post_id  VARCHAR(20)    not null,
-    post_ids VARCHAR(10000) not null,
-    FOREIGN KEY (post_id) REFERENCES POST (post_id) ON DELETE CASCADE
+    post_id  INT(20)    not null,
+    user_id  INT(20)    not null
+    -- FOREIGN KEY (user_id) REFERENCES USER (user_id) ON DELETE CASCADE // 유저 삭제 시 테이블에서 제거
 );

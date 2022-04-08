@@ -6,6 +6,7 @@ import com.pangtudy.boardapi.dto.Post;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 import org.springframework.data.relational.core.query.Query;
+import org.springframework.data.relational.core.query.Update;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -89,6 +90,12 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
     }
 
     @Override
+    public Mono<Integer> updatePostLike(Integer postId, Integer likes) {
+        return r2dbcEntityTemplate.update(Post.class)
+                .matching(Query.query(where("post_id").is(postId))).apply(Update.update("likes", likes));
+    }
+
+    @Override
     public Flux<Post> findPostByWriter(Integer categoryId, String writer) {
         if (categoryId != 0) return r2dbcEntityTemplate.select(Post.class)
                 .matching(query(where("writer").like("%" + writer + "%").and(where("category_id").is(categoryId)))).all();
@@ -120,18 +127,36 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
                 .matching(query(where("tags").like("%" + tag + "%"))).all();
     }
 
-    @Override
     public Flux<Post> findAdjacentPosts(Integer categoryId, Integer postId) {
-        Flux<Post> beforePosts = r2dbcEntityTemplate.select(Post.class)
+        //현재 게시글 조회
+        Flux<Post> currentPost = r2dbcEntityTemplate.select(Post.class)
+                .matching(query(where("post_id").is(postId).and(where("category_id").is(categoryId)))).all();
+
+        Flux<Post> beforePosts = findBeforePosts(categoryId, postId, 1);
+        Flux<Post> result = beforePosts.flatMap(existBeforePost -> {
+            Flux<Post> afterPosts = findAfterPosts(categoryId, postId, 1);
+            return afterPosts.flatMap(existAfterPost -> {
+                return Flux.merge(beforePosts, currentPost, findAfterPosts(categoryId, postId, 1));
+            }).switchIfEmpty(Flux.merge(findBeforePosts(categoryId, postId, 2).takeLast(1), findBeforePosts(categoryId, postId, 2).take(1), currentPost));
+        }).switchIfEmpty(Flux.merge(currentPost, findAfterPosts(categoryId, postId, 2)));
+
+        return result;
+    }
+
+    private Flux<Post> findBeforePosts(Integer categoryId, Integer postId, Integer count) {
+        return r2dbcEntityTemplate.select(Post.class)
                 .matching(Query.query(where("post_id").lessThan(postId)
                         .and(where("category_id")
                                 .is(categoryId)))
-                        .sort(by(desc("post_id"))).limit(1)).all();
-        Flux<Post> afterPosts = r2dbcEntityTemplate.select(Post.class)
+                        .sort(by(desc("post_id"))).limit(count)).all();
+    }
+
+    private Flux<Post> findAfterPosts(Integer categoryId, Integer postId, Integer count) {
+        //이후 게시글 조회
+        return r2dbcEntityTemplate.select(Post.class)
                 .matching(Query.query(where("post_id").greaterThan(postId)
                         .and(where("category_id")
                                 .is(categoryId)))
-                        .sort(by(asc("post_id"))).limit(1)).all();
-        return Flux.merge(beforePosts, afterPosts);
+                        .sort(by(asc("post_id"))).limit(count)).all();
     }
 }
