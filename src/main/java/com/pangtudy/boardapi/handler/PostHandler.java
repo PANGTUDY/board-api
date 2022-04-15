@@ -110,28 +110,18 @@ public class PostHandler {
         int postId = Integer.parseInt(req.pathVariable("post_id"));
         Mono<InputUser> user = req.bodyToMono(InputUser.class);
 
-        Flux<Likes> postLikeList = likesRepository.findByPostId(postId);
-        //postLikeList에 userId가 존재하면(=이미 좋아요한 상태) delete
-        //없으면 insert
-/*
-        final Integer[] userId = new Integer[1];
-        user.subscribe(u -> {
-            userId[0] = u.getUserId();
-        });
-
-        Flux<Likes> postLikeList = likesRepository.findByPostId(postId);
-        Mono<Likes> postLike = postLikeList.filter(likes -> likes.getUserId().equals(userId[0])).single();
-        postLike.map(likes -> {
-            if (likes.getUserId() == null) {
-                Mono<Likes> likesMono = likesRepository.insertUserId(postId, userId[0]);
-            } else {
-                Mono<Integer> updatedRowCount = likesRepository.deleteByPostIdAndUserId(postId, userId[0]);
-            }
-            return null;
-        });
-
-        return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(likesMono, Post.class));*/
-        return null;
+        Mono<Object> result = user.flatMap(inputUser -> likesRepository.findByPostId(postId)
+                .filter(post -> post.getUserId().equals(inputUser.getUserId()))
+                .flatMap(existInputUser -> likesRepository.findPostLikeCount(postId)
+                        .flatMap(like -> postRepository.updatePostLike(postId, like.intValue() - 1))
+                        .flatMap(like->likesRepository.deleteByPostIdAndUserId(postId, existInputUser.getUserId()))
+                        .cast(Object.class))
+                .switchIfEmpty(likesRepository.findPostLikeCount(postId)
+                        .flatMap(like -> postRepository.updatePostLike(postId, like.intValue() + 1))
+                        .flatMap(rowCnt -> likesRepository.insertUserId(postId, inputUser.getUserId()))
+                )
+                .single());
+        return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(result, Likes.class));
     }
 
     public Mono<ServerResponse> delete(ServerRequest req) {
