@@ -24,6 +24,7 @@ import static org.springframework.data.relational.core.query.Query.query;
 @RequiredArgsConstructor
 public class CustomPostRepositoryImpl implements CustomPostRepository {
     private final R2dbcEntityTemplate r2dbcEntityTemplate;
+    public static final Integer SELECT_LIMIT = 10;
 
     @Override
     public Mono<Post> findByIdWithComments(Integer id) {
@@ -96,41 +97,68 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
     }
 
     @Override
-    public Flux<Post> findPostByWriter(Integer categoryId, String writer) {
-        if (categoryId != 0) return r2dbcEntityTemplate.select(Post.class)
-                .matching(query(where("writer").like("%" + writer + "%").and(where("category_id").is(categoryId)))).all();
-        else return r2dbcEntityTemplate.select(Post.class)
-                .matching(query(where("writer").like("%" + writer + "%"))).all();
-    }
-
-    @Override
-    public Flux<Post> findPostByTitleContains(Integer categoryId, String title) {
-        if (categoryId != 0) return r2dbcEntityTemplate.select(Post.class)
-                .matching(query(where("title").like("%" + title + "%").and(where("category_id").is(categoryId)))).all();
-        else return r2dbcEntityTemplate.select(Post.class)
-                .matching(query(where("title").like("%" + title + "%"))).all();
-    }
-
-    @Override
-    public Flux<Post> findPostByTitleAndContentsContains(Integer categoryId, String contents) {
-        if (categoryId != 0) return r2dbcEntityTemplate.select(Post.class)
-                .matching(query(where("title").like("%" + contents + "%").and(where("category_id").is(categoryId)))).all();
-        else return r2dbcEntityTemplate.select(Post.class)
-                .matching(query(where("title").like("%" + contents + "%").or("contents").like("%" + contents + "%"))).all();
-    }
-
-    @Override
-    public Flux<Post> findPostByTagContains(Integer categoryId, String tag) {
-        if (categoryId != 0) return r2dbcEntityTemplate.select(Post.class)
-                .matching(query(where("tags").like("%" + tag + "%").and(where("category_id").is(categoryId)))).all();
+    public Flux<Post> findAllPost(Long offset) {
         return r2dbcEntityTemplate.select(Post.class)
-                .matching(query(where("tags").like("%" + tag + "%"))).all();
+                .matching(Query.empty().offset(offset).limit(SELECT_LIMIT)).all();
+    }
+
+    @Override
+    public Flux<Post> findPostByCategoryId(Long offset, Integer categoryId) {
+        return r2dbcEntityTemplate.select(Post.class)
+                .matching(query(where("category_id").is(categoryId))
+                        .offset(offset).limit(SELECT_LIMIT)).all();
+    }
+
+    @Override
+    public Flux<Post> findPostByWriter(Long offset, Integer categoryId, String writer) {
+        if (categoryId != 0) return r2dbcEntityTemplate.select(Post.class)
+                .matching(query(where("writer").like("%" + writer + "%")
+                        .and(where("category_id").is(categoryId)))
+                        .offset(offset).limit(SELECT_LIMIT)).all();
+        else return r2dbcEntityTemplate.select(Post.class)
+                .matching(query(where("writer").like("%" + writer + "%"))
+                        .offset(offset).limit(SELECT_LIMIT)).all();
+    }
+
+    @Override
+    public Flux<Post> findPostByTitleContains(Long offset, Integer categoryId, String title) {
+        if (categoryId != 0) return r2dbcEntityTemplate.select(Post.class)
+                .matching(query(where("title").like("%" + title + "%")
+                        .and(where("category_id").is(categoryId)))
+                        .offset(offset).limit(SELECT_LIMIT)).all();
+        else return r2dbcEntityTemplate.select(Post.class)
+                .matching(query(where("title").like("%" + title + "%"))
+                        .offset(offset).limit(SELECT_LIMIT)).all();
+    }
+
+    @Override
+    public Flux<Post> findPostByTitleAndContentsContains(Long offset, Integer categoryId, String contents) {
+        if (categoryId != 0) return r2dbcEntityTemplate.select(Post.class)
+                .matching(query(where("title").like("%" + contents + "%")
+                        .and(where("category_id").is(categoryId)))
+                        .offset(offset).limit(SELECT_LIMIT)).all();
+        else return r2dbcEntityTemplate.select(Post.class)
+                .matching(query(where("title").like("%" + contents + "%")
+                        .or("contents").like("%" + contents + "%"))
+                        .offset(offset).limit(SELECT_LIMIT)).all();
+    }
+
+    @Override
+    public Flux<Post> findPostByTagContains(Long offset, Integer categoryId, String tag) {
+        if (categoryId != 0) return r2dbcEntityTemplate.select(Post.class)
+                .matching(query(where("tags").like("%" + tag + "%")
+                        .and(where("category_id").is(categoryId)))
+                        .offset(offset).limit(SELECT_LIMIT)).all();
+        return r2dbcEntityTemplate.select(Post.class)
+                .matching(query(where("tags").like("%" + tag + "%"))
+                        .offset(offset).limit(SELECT_LIMIT)).all();
     }
 
     public Flux<Post> findAdjacentPosts(Integer categoryId, Integer postId) {
         //현재 게시글 조회
         Flux<Post> currentPost = r2dbcEntityTemplate.select(Post.class)
-                .matching(query(where("post_id").is(postId).and(where("category_id").is(categoryId)))).all();
+                .matching(query(where("post_id").is(postId)
+                        .and(where("category_id").is(categoryId)))).all();
 
         Flux<Post> beforePosts = findBeforePosts(categoryId, postId, 1);
         Flux<Post> result = beforePosts.flatMap(existBeforePost -> {

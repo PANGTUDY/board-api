@@ -15,14 +15,50 @@ INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES
 INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('2', 'Junit,Spring', '팡터디 개설!', '주요기능 및 파트 분담', '2021-09-01 12:00:00', '서진하', 0);
 INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('3', '팡터디,PANGTUDY', 'Spring 게시판 개발(1)', '화면을 설계합니다.', '2021-10-27 12:00:00', '서진하', 0);
 INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('3', 'SPRING', 'Spring 게시판 개발(2)', 'API를 설계합니다.', '2021-11-03 12:00:00', '서진하', 0);
-INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('3', 'http,REST,swagger', 'Spring 게시판 개발(3)', '게시판의 주요 기능은 다음과 같습니다.
-    - 카테고리별 게시판 관리
-    - 게시판 : 블로그에 올린 글이나 발표내용 등을 공유할 수 있는 공간
-        - 게시글 - 댓글, 공감, 해시태그, 파일, 공유
-    - 검색
-    - 북마크 공유
-    - 북마크 공유 페이지 : 유저별 크롬 즐겨찾기(북마크) 공유하는 공간', '2021-10-27 12:00:00', '서진하', 0);
-INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('4', 'mysql,likes,index', 'MySQL 인덱스 설정 방법과 실행 계획 확인', 'MySQL에서는 하나의 쿼리를 실행하면 하나의 테이블의 하나의 인덱스만 설정되기 때문에 여러 개의 인텍스를 지정하고 싶은 경우에는 콤마를 이용하여 여러 컬럼을 설정하여 지정', '2021-10-27 12:00:00', '서진하', 3);
+INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('3', 'http,REST,swagger', 'Spring 게시판 개발(3)', '게시판의 주요 기능은 다음과 같습니다.-  북마크 공유 페이지 : 유저별 크롬 즐겨찾기(북마크) 공유하는 공간', '2021-10-27 12:00:00', '서진하', 0);
+INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('4', 'mysql,likes,index', 'MySQL 인덱스 설정 방법과 실행 계획 확인', 'MySQL에서는 하나의 쿼리를 실행하면 하나의 테이블의 하나의 인덱스만 설정되기 때문에 여러 개의 인텍스를 지정하고 싶은 경우에는 콤마를 이용하여 여러 컬럼을 설정하여 지정', '2021-10-27 12:00:00', '서진하', 0);
+INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('4', 'mysql,likes,index', '10번째 게시글', ' 게시글 내용', '2021-10-27 12:00:00', '서진하', 0);
+INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('4', 'mysql,likes,index', '11번째 게시글', ' 게시글 내용', '2021-10-27 12:00:00', '서진하', 0);
+INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('4', 'mysql,likes,index', '12번째 게시글', ' 게시글 내용', '2021-10-27 12:00:00', '서진하', 0);
+INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('4', 'mysql,likes,index', '13번째 게시글', ' 게시글 내용', '2021-10-27 12:00:00', '서진하', 0);
+INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('4', 'mysql,likes,index', '14번째 게시글', ' 게시글 내용', '2021-10-27 12:00:00', '서진하', 0);
+INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('4', 'mysql,likes,index', '15번째 게시글', ' 게시글 내용', '2021-10-27 12:00:00', '서진하', 0);
+INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('4', 'mysql,likes,index', '16번째 게시글', ' 게시글 내용', '2021-10-27 12:00:00', '서진하', 0);
+INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('4', 'mysql,likes,index', '17번째 게시글', ' 게시글 내용', '2021-10-27 12:00:00', '서진하', 0);
+INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('4', 'mysql,likes,index', '18번째 게시글', ' 게시글 내용', '2021-10-27 12:00:00', '서진하', 0);
+INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('4', 'mysql,likes,index', '19번째 게시글', ' 게시글 내용', '2021-10-27 12:00:00', '서진하', 0);
+INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('4', 'mysql,likes,index', '20번째 게시글', ' 게시글 내용', '2021-10-27 12:00:00', '서진하', 0);
+INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('4', 'mysql,likes,index', '21번째 게시글', ' 게시글 내용', '2021-10-27 12:00:00', '서진하', 0);
+INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('4', 'mysql,likes,index', '22번째 게시글', ' 게시글 내용', '2021-10-27 12:00:00', '서진하', 0);
+INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('4', 'mysql,likes,index', '23번째 게시글', ' 게시글 내용', '2021-10-27 12:00:00', '서진하', 0);
+INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('4', 'mysql,likes,index', '24번째 게시글', ' 게시글 내용', '2021-10-27 12:00:00', '서진하', 0);
+INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('4', 'mysql,likes,index', '25번째 게시글', ' 게시글 내용', '2021-10-27 12:00:00', '서진하', 0);
+INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('4', 'mysql,likes,index', '26번째 게시글', ' 게시글 내용', '2021-10-27 12:00:00', '서진하', 0);
+INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('4', 'mysql,likes,index', '27번째 게시글', ' 게시글 내용', '2021-10-27 12:00:00', '서진하', 0);
+INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('4', 'mysql,likes,index', '28번째 게시글', ' 게시글 내용', '2021-10-27 12:00:00', '서진하', 0);
+INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('4', 'mysql,likes,index', '29번째 게시글', ' 게시글 내용', '2021-10-27 12:00:00', '서진하', 0);
+INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('4', 'mysql,likes,index', '30번째 게시글', ' 게시글 내용', '2021-10-27 12:00:00', '서진하', 0);
+INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('4', 'mysql,likes,index', '31번째 게시글', ' 게시글 내용', '2021-10-27 12:00:00', '서진하', 0);
+INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('4', 'mysql,likes,index', '32번째 게시글', ' 게시글 내용', '2021-10-27 12:00:00', '서진하', 0);
+INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('4', 'mysql,likes,index', '33번째 게시글', ' 게시글 내용', '2021-10-27 12:00:00', '서진하', 0);
+INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('4', 'mysql,likes,index', '34번째 게시글', ' 게시글 내용', '2021-10-27 12:00:00', '서진하', 0);
+INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('4', 'mysql,likes,index', '35번째 게시글', ' 게시글 내용', '2021-10-27 12:00:00', '서진하', 0);
+INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('4', 'mysql,likes,index', '36번째 게시글', ' 게시글 내용', '2021-10-27 12:00:00', '서진하', 0);
+INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('4', 'mysql,likes,index', '37번째 게시글', ' 게시글 내용', '2021-10-27 12:00:00', '서진하', 0);
+INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('4', 'mysql,likes,index', '38번째 게시글', ' 게시글 내용', '2021-10-27 12:00:00', '서진하', 0);
+INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('4', 'mysql,likes,index', '39번째 게시글', ' 게시글 내용', '2021-10-27 12:00:00', '서진하', 0);
+INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('4', 'mysql,likes,index', '40번째 게시글', ' 게시글 내용', '2021-10-27 12:00:00', '서진하', 0);
+INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('4', 'mysql,likes,index', '41번째 게시글', ' 게시글 내용', '2021-10-27 12:00:00', '서진하', 0);
+INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('4', 'mysql,likes,index', '42번째 게시글', ' 게시글 내용', '2021-10-27 12:00:00', '서진하', 0);
+INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('4', 'mysql,likes,index', '43번째 게시글', ' 게시글 내용', '2021-10-27 12:00:00', '서진하', 0);
+INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('4', 'mysql,likes,index', '44번째 게시글', ' 게시글 내용', '2021-10-27 12:00:00', '서진하', 0);
+INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('4', 'mysql,likes,index', '45번째 게시글', ' 게시글 내용', '2021-10-27 12:00:00', '서진하', 0);
+INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('4', 'mysql,likes,index', '46번째 게시글', ' 게시글 내용', '2021-10-27 12:00:00', '서진하', 0);
+INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('4', 'mysql,likes,index', '47번째 게시글', ' 게시글 내용', '2021-10-27 12:00:00', '서진하', 0);
+INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('4', 'mysql,likes,index', '48번째 게시글', ' 게시글 내용', '2021-10-27 12:00:00', '서진하', 0);
+INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('4', 'mysql,likes,index', '49번째 게시글', ' 게시글 내용', '2021-10-27 12:00:00', '서진하', 0);
+INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('4', 'mysql,likes,index', '50번째 게시글', ' 게시글 내용', '2021-10-27 12:00:00', '서진하', 0);
+INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('4', 'mysql,likes,index', '51번째 게시글', ' 게시글 내용', '2021-10-27 12:00:00', '서진하', 0);
 
 INSERT INTO COMMENT(post_id, writer, contents, date) VALUES ('1', '서진하', '게시글1의 댓글1. 게시글은 100자로 제한합니다.', '2021-10-27 12:00:00');
 INSERT INTO COMMENT(post_id, writer, contents, date) VALUES ('1', '박찬준', '게시글1의 댓글2', '2021-10-27 12:00:00');
@@ -30,12 +66,3 @@ INSERT INTO COMMENT(post_id, writer, contents, date) VALUES ('2', '임재창', '
 INSERT INTO COMMENT(post_id, writer, contents, date) VALUES ('2', '김민주', '게시글2의 댓글2', '2021-10-28 12:00:00');
 INSERT INTO COMMENT(post_id, writer, contents, date) VALUES ('2', '원철황', '게시글2의 댓글3', '2021-10-28 12:00:00');
 INSERT INTO COMMENT(post_id, writer, contents, date) VALUES ('3', '박혜원', '게시글3의 댓글1', '2021-10-28 12:00:00');
-
---INSERT INTO FILE(post_id, file_name, file_path, file_type) VALUES ('1','파일1이름','파일1경로','파일1타입');
---INSERT INTO FILE(post_id, file_name, file_path, file_type) VALUES ('1','파일2이름','파일2경로','파일2타입');
-
-INSERT INTO LIKES(post_id, user_id) VALUES ('1','1');
-INSERT INTO LIKES(post_id, user_id) VALUES ('1','2');
-INSERT INTO LIKES(post_id, user_id) VALUES ('1','3');
-INSERT INTO LIKES(post_id, user_id) VALUES ('2','2');
-INSERT INTO LIKES(post_id, user_id) VALUES ('2','3');

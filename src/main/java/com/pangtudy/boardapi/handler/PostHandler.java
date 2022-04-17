@@ -50,30 +50,34 @@ public class PostHandler {
     }
 
     public Mono<ServerResponse> readAll(ServerRequest req) {
+        Optional<String> pageNumString = req.queryParam("page_num");
         Optional<String> categoryId = req.queryParam("category_id");
         Optional<String> writer = req.queryParam("writer");
         Optional<String> title = req.queryParam("title");
         Optional<String> contents = req.queryParam("contents");
         Optional<String> tag = req.queryParam("tag");
         Flux<Post> posts;
+        Integer pageNum = pageNumString.map(Integer::valueOf).orElse(1);
         Integer categoryNum = categoryId.map(Integer::valueOf).orElse(0);
         String writerName = writer.map(String::valueOf).orElse("");
         String titleString = title.map(String::valueOf).orElse("");
         String contentsString = contents.map(String::valueOf).orElse("");
         String tagString = tag.map(String::valueOf).orElse("");
 
+        Long offset = (pageNum - 1) * 10L;
+
         if (writerName != "")
-            posts = postRepository.findPostByWriter(categoryNum, writerName);
+            posts = postRepository.findPostByWriter(offset, categoryNum, writerName);
         else if (titleString != "")
-            posts = postRepository.findPostByTitleContains(categoryNum, titleString);
+            posts = postRepository.findPostByTitleContains(offset, categoryNum, titleString);
         else if (contentsString != "")
-            posts = postRepository.findPostByTitleAndContentsContains(categoryNum, contentsString);
+            posts = postRepository.findPostByTitleAndContentsContains(offset, categoryNum, contentsString);
         else if (tagString != "")
-            posts = postRepository.findPostByTagContains(categoryNum, tagString);
+            posts = postRepository.findPostByTagContains(offset, categoryNum, tagString);
         else if (categoryNum != 0)
-            posts = postRepository.findPostByCategoryId(categoryNum);
+            posts = postRepository.findPostByCategoryId(offset, categoryNum);
         else
-            posts = postRepository.findAll();
+            posts = postRepository.findAllPost(offset);
         return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(posts, Post.class));
     }
 
@@ -116,7 +120,7 @@ public class PostHandler {
                 .filter(post -> post.getUserId().equals(inputUser.getUserId()))
                 .flatMap(existInputUser -> likesRepository.findPostLikeCount(postId)
                         .flatMap(like -> postRepository.updatePostLike(postId, like.intValue() - 1))
-                        .flatMap(like->likesRepository.deleteByPostIdAndUserId(postId, existInputUser.getUserId()))
+                        .flatMap(like -> likesRepository.deleteByPostIdAndUserId(postId, existInputUser.getUserId()))
                         .flatMap(a -> likesRepository.findPostLikeCount(postId))
                         .cast(Long.class))
                 .switchIfEmpty(likesRepository.findPostLikeCount(postId)
@@ -133,7 +137,7 @@ public class PostHandler {
 
         Flux<Likes> likesFlux = likesRepository.findByPostId(postId);
         List<Integer> userList = new ArrayList<>();
-        likesFlux.subscribe(user-> userList.add(user.getUserId()));
+        likesFlux.subscribe(user -> userList.add(user.getUserId()));
         return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(Mono.just(userList), Likes.class));
     }
 

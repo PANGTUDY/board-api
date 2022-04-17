@@ -122,6 +122,7 @@ public class PostRouter {
                                     @ApiResponse(responseCode = "200", description = "successful operation",
                                             content = @Content(schema = @Schema(implementation = Post.class)))},
                             parameters = {
+                                    @Parameter(name = "page_num", in = ParameterIn.QUERY, example = "1", schema = @Schema(type = "Integer")),
                                     @Parameter(name = "category_id", in = ParameterIn.QUERY, schema = @Schema(type = "Integer")),
                                     @Parameter(name = "writer", in = ParameterIn.QUERY, schema = @Schema(type = "String")),
                                     @Parameter(name = "title", in = ParameterIn.QUERY, schema = @Schema(type = "String")),
@@ -138,7 +139,6 @@ public class PostRouter {
                 .andRoute(GET("/board/posts/adjacent/{category_id}/{post_id}"), postHandler::readAdjacent)
                 .andRoute(PATCH("/board/posts/{post_id}"), postHandler::update)
                 .andRoute(DELETE("/board/posts/{post_id}"), postHandler::delete)
-//                .andRoute(GET("/board/posts/page"), postHandler.readSelectedPage)
                 .andRoute(POST("/board/posts"), postHandler::create)
                 .andRoute(GET("/board/posts"), postHandler::readAll);
     }
