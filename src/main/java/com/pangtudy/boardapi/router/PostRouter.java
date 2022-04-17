@@ -50,7 +50,7 @@ public class PostRouter {
                     operation = @Operation(summary = "좋아요 상태 변경", operationId = "updateLikes",
                             responses = {
                                     @ApiResponse(responseCode = "200", description = "successful operation",
-                                            content = @Content(schema = @Schema(implementation = Likes.class))),
+                                            content = @Content(schema = @Schema(implementation = Long.class))),
                                     @ApiResponse(responseCode = "400", description = "Invalid Post details supplied")},
                             parameters = {
                                     @Parameter(in = ParameterIn.PATH, name = "post_id")},

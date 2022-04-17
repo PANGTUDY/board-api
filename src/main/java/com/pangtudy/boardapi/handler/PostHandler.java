@@ -110,15 +110,17 @@ public class PostHandler {
         int postId = Integer.parseInt(req.pathVariable("post_id"));
         Mono<InputUser> user = req.bodyToMono(InputUser.class);
 
-        Mono<Object> result = user.flatMap(inputUser -> likesRepository.findByPostId(postId)
+        Mono<Long> result = user.flatMap(inputUser -> likesRepository.findByPostId(postId)
                 .filter(post -> post.getUserId().equals(inputUser.getUserId()))
                 .flatMap(existInputUser -> likesRepository.findPostLikeCount(postId)
                         .flatMap(like -> postRepository.updatePostLike(postId, like.intValue() - 1))
                         .flatMap(like->likesRepository.deleteByPostIdAndUserId(postId, existInputUser.getUserId()))
-                        .cast(Object.class))
+                        .flatMap(a -> likesRepository.findPostLikeCount(postId))
+                        .cast(Long.class))
                 .switchIfEmpty(likesRepository.findPostLikeCount(postId)
                         .flatMap(like -> postRepository.updatePostLike(postId, like.intValue() + 1))
                         .flatMap(rowCnt -> likesRepository.insertUserId(postId, inputUser.getUserId()))
+                        .flatMap(a -> likesRepository.findPostLikeCount(postId))
                 )
                 .single());
         return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(result, Likes.class));
