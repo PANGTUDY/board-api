@@ -16,6 +16,8 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -124,6 +126,15 @@ public class PostHandler {
                 )
                 .single());
         return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(result, Likes.class));
+    }
+
+    public Mono<ServerResponse> selectUsersLikePost(ServerRequest req) {
+        int postId = Integer.parseInt(req.pathVariable("post_id"));
+
+        Flux<Likes> likesFlux = likesRepository.findByPostId(postId);
+        List<Integer> userList = new ArrayList<>();
+        likesFlux.subscribe(user-> userList.add(user.getUserId()));
+        return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(Mono.just(userList), Likes.class));
     }
 
     public Mono<ServerResponse> delete(ServerRequest req) {
