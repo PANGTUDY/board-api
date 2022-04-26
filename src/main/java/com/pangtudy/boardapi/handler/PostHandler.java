@@ -9,6 +9,8 @@ import com.pangtudy.boardapi.repository.PostRepository;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -16,9 +18,7 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
@@ -30,6 +30,7 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ok
 public class PostHandler {
     private final PostRepository postRepository;
     private final LikesRepository likesRepository;
+    public static final Long PAGE_POST_COUNT = 10L;
 
     public Mono<ServerResponse> create(ServerRequest req) {
         Mono<InputPost> newPost = req.bodyToMono(InputPost.class);
@@ -64,22 +65,51 @@ public class PostHandler {
         String contentsString = contents.map(String::valueOf).orElse("");
         String tagString = tag.map(String::valueOf).orElse("");
 
-        Long offset = (pageNum - 1) * 10L;
+        Long offset = (pageNum - 1) * PAGE_POST_COUNT;
+        Map<String, Long> map = new HashMap<>();
+        Mono<Long> resultPostCount;
 
-        if (writerName != "")
+        if (writerName != "") {
             posts = postRepository.findPostByWriter(offset, categoryNum, writerName);
-        else if (titleString != "")
+            resultPostCount = postRepository.findPostByWriterCount(categoryNum, writerName);
+        } else if (titleString != "") {
             posts = postRepository.findPostByTitleContains(offset, categoryNum, titleString);
-        else if (contentsString != "")
+            resultPostCount = postRepository.findPostByTitleContainsCount(categoryNum, titleString);
+        } else if (contentsString != "") {
             posts = postRepository.findPostByTitleAndContentsContains(offset, categoryNum, contentsString);
-        else if (tagString != "")
+            resultPostCount = postRepository.findPostByTitleAndContentsContainsCount(categoryNum, contentsString);
+        } else if (tagString != "") {
             posts = postRepository.findPostByTagContains(offset, categoryNum, tagString);
-        else if (categoryNum != 0)
+            resultPostCount = postRepository.findPostByTagContainsCount(categoryNum, tagString);
+        } else if (categoryNum != 0) {
             posts = postRepository.findPostByCategoryId(offset, categoryNum);
-        else
+            resultPostCount = postRepository.findPostByCategoryIdCount(categoryNum);
+        } else {
             posts = postRepository.findAllPost(offset);
-        return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(posts, Post.class));
+            resultPostCount = postRepository.findAllPostCount();
+        }
+
+        List<Long> subscribedResultPostCount = callUserItem(resultPostCount);
+        Long totalPageNum = (subscribedResultPostCount.get(0) / PAGE_POST_COUNT) + 1;
+        if (Long.valueOf(pageNum) > totalPageNum || Long.valueOf(pageNum) < 1)
+            return ServerResponse.status(HttpStatus.BAD_REQUEST)
+                    .contentType(MediaType.APPLICATION_JSON).bodyValue(new Exception("invalid input page number"));
+        map.put("currPageNum", Long.valueOf(pageNum));
+        map.put("totalPageNum", totalPageNum);
+        Flux<Map<String, Long>> pageData = Flux.just(map);
+        return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(Flux.concat(posts, pageData), Post.class));
     }
+
+    private List<Long> callUserItem(Mono<Long> totalResult) {
+        List<Long> itemList = new ArrayList<>();
+        totalResult.subscribe(res -> {
+            if (res != null) {
+                itemList.add(res);
+            }
+        });
+        return itemList;
+    }
+
 
     public Mono<ServerResponse> read(ServerRequest req) {
         int postId = Integer.valueOf(req.pathVariable("post_id"));
