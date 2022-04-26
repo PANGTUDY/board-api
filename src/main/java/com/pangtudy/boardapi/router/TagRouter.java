@@ -1,6 +1,6 @@
 package com.pangtudy.boardapi.router;
 
-import com.pangtudy.boardapi.dto.Tag;
+import com.pangtudy.boardapi.entity.Tag;
 import com.pangtudy.boardapi.handler.TagHandler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

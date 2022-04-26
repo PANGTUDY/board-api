@@ -1,6 +1,6 @@
 package com.pangtudy.boardapi.repository;
 
-import com.pangtudy.boardapi.dto.Comment;
+import com.pangtudy.boardapi.entity.Comment;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import reactor.core.publisher.Flux;
 

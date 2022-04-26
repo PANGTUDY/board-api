@@ -2,8 +2,8 @@ package com.pangtudy.boardapi.router;
 
 import com.pangtudy.boardapi.dto.InputPost;
 import com.pangtudy.boardapi.dto.InputUser;
-import com.pangtudy.boardapi.dto.Likes;
-import com.pangtudy.boardapi.dto.Post;
+import com.pangtudy.boardapi.entity.Likes;
+import com.pangtudy.boardapi.entity.Post;
 import com.pangtudy.boardapi.handler.PostHandler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

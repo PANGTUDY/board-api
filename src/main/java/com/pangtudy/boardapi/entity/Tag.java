@@ -1,4 +1,4 @@
-package com.pangtudy.boardapi.dto;
+package com.pangtudy.boardapi.entity;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;
@@ -12,11 +12,8 @@ import org.springframework.data.relational.core.mapping.Table;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class File {
+public class Tag {
     @Id
-    private Integer fileId;
-    private String fileName;
-    private String filePath;
-    private String fileType;
-    //private int postId;
+    private String tag;
+    private String postId;
 }

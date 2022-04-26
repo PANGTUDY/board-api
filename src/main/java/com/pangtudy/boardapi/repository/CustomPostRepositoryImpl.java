@@ -1,8 +1,8 @@
 package com.pangtudy.boardapi.repository;
 
-import com.pangtudy.boardapi.dto.Category;
-import com.pangtudy.boardapi.dto.Comment;
-import com.pangtudy.boardapi.dto.Post;
+import com.pangtudy.boardapi.entity.Category;
+import com.pangtudy.boardapi.entity.Comment;
+import com.pangtudy.boardapi.entity.Post;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 import org.springframework.data.relational.core.query.Query;
@@ -164,9 +164,9 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
         Flux<Post> result = beforePosts.flatMap(existBeforePost -> {
             Flux<Post> afterPosts = findAfterPosts(categoryId, postId, 1);
             return afterPosts.flatMap(existAfterPost -> {
-                return Flux.merge(beforePosts, currentPost, findAfterPosts(categoryId, postId, 1));
-            }).switchIfEmpty(Flux.merge(findBeforePosts(categoryId, postId, 2).takeLast(1), findBeforePosts(categoryId, postId, 2).take(1), currentPost));
-        }).switchIfEmpty(Flux.merge(currentPost, findAfterPosts(categoryId, postId, 2)));
+                return Flux.concat(beforePosts, currentPost, findAfterPosts(categoryId, postId, 1));
+            }).switchIfEmpty(Flux.concat(findBeforePosts(categoryId, postId, 2).takeLast(1), findBeforePosts(categoryId, postId, 2).take(1), currentPost));
+        }).switchIfEmpty(Flux.concat(currentPost, findAfterPosts(categoryId, postId, 2)));
 
         return result;
     }

@@ -1,6 +1,6 @@
 package com.pangtudy.boardapi.handler;
 
-import com.pangtudy.boardapi.dto.File;
+import com.pangtudy.boardapi.entity.File;
 import com.pangtudy.boardapi.repository.FileRepository;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

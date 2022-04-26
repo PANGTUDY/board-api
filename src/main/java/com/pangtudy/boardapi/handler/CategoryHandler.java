@@ -1,6 +1,6 @@
 package com.pangtudy.boardapi.handler;
 
-import com.pangtudy.boardapi.dto.Category;
+import com.pangtudy.boardapi.entity.Category;
 import com.pangtudy.boardapi.dto.InputCategory;
 import com.pangtudy.boardapi.repository.CategoryRepository;
 import io.swagger.v3.oas.annotations.tags.Tag;

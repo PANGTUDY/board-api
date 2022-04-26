@@ -1,6 +1,6 @@
 package com.pangtudy.boardapi.repository;
 
-import com.pangtudy.boardapi.dto.Category;
+import com.pangtudy.boardapi.entity.Category;
 import reactor.core.publisher.Mono;
 
 public interface CustomCategoryRepository {

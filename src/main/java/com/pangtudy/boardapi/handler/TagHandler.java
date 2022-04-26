@@ -1,6 +1,6 @@
 package com.pangtudy.boardapi.handler;
 
-import com.pangtudy.boardapi.dto.Tag;
+import com.pangtudy.boardapi.entity.Tag;
 import com.pangtudy.boardapi.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,6 +1,6 @@
 package com.pangtudy.boardapi.router;
 
-import com.pangtudy.boardapi.dto.Category;
+import com.pangtudy.boardapi.entity.Category;
 import com.pangtudy.boardapi.dto.InputCategory;
 import com.pangtudy.boardapi.handler.CategoryHandler;
 import io.swagger.v3.oas.annotations.Operation;

@@ -1,6 +1,6 @@
 package com.pangtudy.boardapi.repository;
 
-import com.pangtudy.boardapi.dto.Likes;
+import com.pangtudy.boardapi.entity.Likes;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 

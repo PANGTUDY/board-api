@@ -1,4 +1,4 @@
-package com.pangtudy.boardapi.dto;
+package com.pangtudy.boardapi.entity;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;

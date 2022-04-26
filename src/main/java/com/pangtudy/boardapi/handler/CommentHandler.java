@@ -1,9 +1,7 @@
 package com.pangtudy.boardapi.handler;
 
-import com.pangtudy.boardapi.dto.Comment;
+import com.pangtudy.boardapi.entity.Comment;
 import com.pangtudy.boardapi.dto.InputComment;
-import com.pangtudy.boardapi.dto.InputPost;
-import com.pangtudy.boardapi.dto.Post;
 import com.pangtudy.boardapi.repository.CommentRepository;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

@@ -1,6 +1,6 @@
 package com.pangtudy.boardapi.router;
 
-import com.pangtudy.boardapi.dto.File;
+import com.pangtudy.boardapi.entity.File;
 import com.pangtudy.boardapi.handler.FileHandler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

@@ -1,6 +1,6 @@
 package com.pangtudy.boardapi.router;
 
-import com.pangtudy.boardapi.dto.Comment;
+import com.pangtudy.boardapi.entity.Comment;
 import com.pangtudy.boardapi.dto.InputComment;
 import com.pangtudy.boardapi.handler.CommentHandler;
 import io.swagger.v3.oas.annotations.Operation;

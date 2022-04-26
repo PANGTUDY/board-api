@@ -1,6 +1,6 @@
 package com.pangtudy.boardapi.repository;
 
-import com.pangtudy.boardapi.dto.Likes;
+import com.pangtudy.boardapi.entity.Likes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 import org.springframework.stereotype.Repository;

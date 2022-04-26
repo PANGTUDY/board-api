@@ -1,6 +1,6 @@
 package com.pangtudy.boardapi.repository;
 
-import com.pangtudy.boardapi.dto.Comment;
+import com.pangtudy.boardapi.entity.Comment;
 import reactor.core.publisher.Mono;
 
 public interface CustomCommentRepository {
