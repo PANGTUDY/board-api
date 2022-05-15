@@ -2,6 +2,7 @@ package com.pangtudy.boardapi.handler;
 
 import com.pangtudy.boardapi.dto.InputPost;
 import com.pangtudy.boardapi.dto.InputUser;
+import com.pangtudy.boardapi.dto.PageSearchResult;
 import com.pangtudy.boardapi.entity.Likes;
 import com.pangtudy.boardapi.entity.Post;
 import com.pangtudy.boardapi.repository.LikesRepository;
@@ -9,8 +10,6 @@ import com.pangtudy.boardapi.repository.PostRepository;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -89,27 +88,18 @@ public class PostHandler {
             resultPostCount = postRepository.findAllPostCount();
         }
 
-        List<Long> subscribedResultPostCount = callUserItem(resultPostCount);
-        Long totalPageNum = (subscribedResultPostCount.get(0) / PAGE_POST_COUNT) + 1;
-        if (Long.valueOf(pageNum) > totalPageNum || Long.valueOf(pageNum) < 1)
-            return ServerResponse.status(HttpStatus.BAD_REQUEST)
-                    .contentType(MediaType.APPLICATION_JSON).bodyValue(new Exception("invalid input page number"));
-        map.put("currPageNum", Long.valueOf(pageNum));
-        map.put("totalPageNum", totalPageNum);
-        Flux<Map<String, Long>> pageData = Flux.just(map);
-        return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(Flux.concat(posts, pageData), Post.class));
-    }
+        return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(posts.collectList().zipWith(resultPostCount)
+                .map(tuples -> {
+                    List<Post> postList = tuples.getT1();
+                    Long totalPageNum = (tuples.getT2() / PAGE_POST_COUNT) + 1;
 
-    private List<Long> callUserItem(Mono<Long> totalResult) {
-        List<Long> itemList = new ArrayList<>();
-        totalResult.subscribe(res -> {
-            if (res != null) {
-                itemList.add(res);
-            }
-        });
-        return itemList;
+                    return PageSearchResult.builder()
+                            .posts(postList)
+                            .currPageNum(pageNum.longValue())
+                            .totalPageNum(totalPageNum)
+                            .build();
+                }), PageSearchResult.class));
     }
-
 
     public Mono<ServerResponse> read(ServerRequest req) {
         int postId = Integer.valueOf(req.pathVariable("post_id"));
