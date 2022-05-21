@@ -156,9 +156,8 @@ public class PostHandler {
         int postId = Integer.parseInt(req.pathVariable("post_id"));
 
         Flux<Likes> likesFlux = likesRepository.findByPostId(postId);
-        List<Integer> userList = new ArrayList<>();
-        likesFlux.subscribe(user -> userList.add(user.getUserId()));
-        return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(Mono.just(userList), Likes.class));
+        Flux<Integer> userList = likesFlux.map(Likes::getUserId);
+        return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(userList, Integer.class));
     }
 
     public Mono<ServerResponse> delete(ServerRequest req) {
