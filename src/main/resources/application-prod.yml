@@ -1,0 +1,14 @@
+eureka:
+  instance:
+    non-secure-port: 10833
+  client:
+    service-url:
+      defaultZone: http://ip-172-31-83-143.ec2.internal:8761/eureka
+    register-with-eureka: true
+    fetch-registry: true
+
+r2dbc:
+  host: 34.235.128.109
+  user: pangtudy
+  password: Dnjs960131!
+  database: board

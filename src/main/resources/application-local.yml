@@ -1,0 +1,18 @@
+spring:
+  sql:
+    init:
+      schema-locations: schema.sql
+      data-locations: data.sql
+      encoding: UTF-8
+  r2dbc:
+    url: r2dbc:h2:mem:///test
+    username:
+    password:
+  h2:
+    console:
+      enabled: true
+  datasource:
+    url: jdbc:h2:mem:test
+    driver-class-name: org.h2.Driver
+    username:
+    password:
