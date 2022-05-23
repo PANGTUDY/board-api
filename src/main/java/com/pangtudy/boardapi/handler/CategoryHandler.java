@@ -1,8 +1,10 @@
 package com.pangtudy.boardapi.handler;
 
-import com.pangtudy.boardapi.entity.Category;
 import com.pangtudy.boardapi.dto.InputCategory;
+import com.pangtudy.boardapi.dto.User;
+import com.pangtudy.boardapi.entity.Category;
 import com.pangtudy.boardapi.repository.CategoryRepository;
+import com.pangtudy.boardapi.repository.UserRepository;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +24,18 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ok
 @Tag(name = "category", description = "카테고리 API")
 public class CategoryHandler {
     private final CategoryRepository categoryRepository;
+    private final UserRepository userRepository;
+
+    public Mono<ServerResponse> getUsers(ServerRequest req){
+        Flux<User> userFlux = userRepository.getAllUser();
+        return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(userFlux, User.class));
+    }
+
+    public Mono<ServerResponse> getUser(ServerRequest req){
+        int userId = Integer.parseInt(req.pathVariable("id"));
+        Mono<User> userMono = userRepository.getUser(userId);
+        return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(userMono, User.class));
+    }
 
     public Mono<ServerResponse> create(ServerRequest req) {
         Mono<InputCategory> newCategory = req.bodyToMono(InputCategory.class);
