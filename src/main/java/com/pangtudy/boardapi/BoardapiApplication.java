@@ -6,7 +6,6 @@ import reactivefeign.spring.config.EnableReactiveFeignClients;
 
 @EnableReactiveFeignClients
 @SpringBootApplication
-@EnableEurekaClient
 public class BoardapiApplication {
 
     public static void main(String[] args) {
