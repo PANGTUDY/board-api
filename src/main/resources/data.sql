@@ -60,9 +60,9 @@ INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES
 INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('4', 'mysql,likes,index', '50번째 게시글', ' 게시글 내용', '2021-10-27 12:00:00', '서진하', 0);
 INSERT INTO POST(category_id, tags, title, contents, date, writer, likes) VALUES ('4', 'mysql,likes,index', '51번째 게시글', ' 게시글 내용', '2021-10-27 12:00:00', '서진하', 0);
 
-INSERT INTO COMMENT(post_id, writer, contents, date) VALUES ('1', '서진하', '게시글1의 댓글1. 게시글은 100자로 제한합니다.', '2021-10-27 12:00:00');
-INSERT INTO COMMENT(post_id, writer, contents, date) VALUES ('1', '박찬준', '게시글1의 댓글2', '2021-10-27 12:00:00');
-INSERT INTO COMMENT(post_id, writer, contents, date) VALUES ('2', '임재창', '게시글2의 댓글1', '2021-10-28 12:00:00');
-INSERT INTO COMMENT(post_id, writer, contents, date) VALUES ('2', '김민주', '게시글2의 댓글2', '2021-10-28 12:00:00');
-INSERT INTO COMMENT(post_id, writer, contents, date) VALUES ('2', '원철황', '게시글2의 댓글3', '2021-10-28 12:00:00');
-INSERT INTO COMMENT(post_id, writer, contents, date) VALUES ('3', '박혜원', '게시글3의 댓글1', '2021-10-28 12:00:00');
+INSERT INTO COMMENT(post_id, writer_id, contents, date) VALUES ('1', '1', '게시글1의 댓글1. 게시글은 100자로 제한합니다.', '2021-10-27 12:00:00');
+INSERT INTO COMMENT(post_id, writer_id, contents, date) VALUES ('1', '2', '게시글1의 댓글2', '2021-10-27 12:00:00');
+INSERT INTO COMMENT(post_id, writer_id, contents, date) VALUES ('2', '3', '게시글2의 댓글1', '2021-10-28 12:00:00');
+INSERT INTO COMMENT(post_id, writer_id, contents, date) VALUES ('2', '4', '게시글2의 댓글2', '2021-10-28 12:00:00');
+INSERT INTO COMMENT(post_id, writer_id, contents, date) VALUES ('2', '3', '게시글2의 댓글3', '2021-10-28 12:00:00');
+INSERT INTO COMMENT(post_id, writer_id, contents, date) VALUES ('3', '7', '게시글3의 댓글1', '2021-10-28 12:00:00');

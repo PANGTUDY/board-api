@@ -57,7 +57,7 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
                                                 .map(row -> Comment.builder()
                                                         .commentId((Integer) row.get("comment_id"))
                                                         .postId((Integer) row.get("post_id"))
-                                                        .writer((String) row.get("writer"))
+                                                        .writerId((Integer) row.get("writer_id"))
                                                         .contents((String) row.get("contents"))
                                                         .date((LocalDateTime) row.get("date"))
                                                         .build())

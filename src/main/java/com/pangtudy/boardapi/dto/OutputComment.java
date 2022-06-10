@@ -14,8 +14,10 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class InputComment {
+public class OutputComment {
+    private Integer commentId;
     private Integer writerId;
+    private String writerName;
     private String contents;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime date;

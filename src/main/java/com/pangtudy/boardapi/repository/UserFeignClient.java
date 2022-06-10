@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import reactivefeign.spring.config.ReactiveFeignClient;
 import reactor.core.publisher.Mono;
 
-@ReactiveFeignClient(name = "user-api", url="http://ec2-54-242-72-201.compute-1.amazonaws.com:8080")
+@ReactiveFeignClient(name = "user-api", url="pangtudy.xyz:10832")
 @Component
 public interface UserFeignClient
 {

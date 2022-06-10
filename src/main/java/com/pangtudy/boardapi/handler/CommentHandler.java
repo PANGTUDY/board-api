@@ -1,5 +1,6 @@
 package com.pangtudy.boardapi.handler;
 
+import com.pangtudy.boardapi.dto.OutputComment;
 import com.pangtudy.boardapi.entity.Comment;
 import com.pangtudy.boardapi.dto.InputComment;
 import com.pangtudy.boardapi.repository.CommentRepository;
@@ -28,28 +29,27 @@ public class CommentHandler {
         Mono<InputComment> newComment = req.bodyToMono(InputComment.class);
         Mono<Comment> savedComment = newComment
                 .flatMap(value -> Mono.just(Comment.builder()
-                        .writer(value.getWriter())
-                        .writer(value.getWriter())
+                        .writerId(value.getWriterId())
                         .contents(value.getContents())
                         .date(value.getDate())
                         .postId(postId)
                         .build()
                 ))
                 .flatMap(comment -> commentRepository.save(comment));
-        return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(savedComment, Comment.class));
+        return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(savedComment, OutputComment.class));
     }
 
     public Mono<ServerResponse> readAll(ServerRequest req) {
         int postId = Integer.valueOf(req.pathVariable("post_id"));
         Flux<Comment> comments = commentRepository.findCommentByPostId(postId);
-        return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(comments, Comment.class));
+        return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(comments, OutputComment.class));
     }
 
     public Mono<ServerResponse> read(ServerRequest req) {
         int postId = Integer.valueOf(req.pathVariable("post_id"));
         int commentId = Integer.valueOf(req.pathVariable("comment_id"));
         return commentRepository.findCommentByPostIdAndCommentId(postId, commentId)
-                .flatMap(post -> ok().contentType(APPLICATION_JSON).bodyValue(post))
+                .flatMap(comment -> ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(comment, OutputComment.class)))
                 .switchIfEmpty(ServerResponse.notFound().build());
     }
 
@@ -61,8 +61,7 @@ public class CommentHandler {
         Mono<Comment> oldComment = commentRepository.findCommentByPostIdAndCommentId(postId, commentId);
         Mono<Comment> savedComment = newComment
                 .flatMap(value -> Mono.just(Comment.builder()
-                        .writer(value.getWriter())
-                        .writer(value.getWriter())
+                        .writerId(value.getWriterId())
                         .contents(value.getContents())
                         .date(value.getDate())
                         .postId(postId)
@@ -70,7 +69,7 @@ public class CommentHandler {
                         .build()
                 ))
                 .flatMap(comment -> commentRepository.save(comment));
-        return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(savedComment, Comment.class));
+        return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(savedComment, OutputComment.class));
     }
 
     public Mono<ServerResponse> delete(ServerRequest req) {

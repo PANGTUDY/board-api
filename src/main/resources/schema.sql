@@ -25,8 +25,7 @@ CREATE TABLE COMMENT
 (
     comment_id    INT(20) AUTO_INCREMENT PRIMARY KEY,
     post_id       INT(20)      not null,
-    follow_id     INT(20),
-    writer        VARCHAR(20)  not null,
+    writer_id        INT(20)  not null,
     contents      VARCHAR(100) not null,
     date          datetime     not null,
     FOREIGN KEY (post_id) REFERENCES POST (post_id) ON DELETE CASCADE
