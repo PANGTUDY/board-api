@@ -9,7 +9,7 @@ public interface CustomPostRepository {
     Flux<Post> findPostByCategoryId(Long offset, Integer categoryId);
     Mono<Post> findByIdWithComments(Integer id);
     Mono<Integer> updatePostLike(Integer id, Integer likes);
-    Flux<Post> findPostByWriter(Long offset, Integer categoryId, String writer);
+    Flux<Post> findPostByWriter(Long offset, Integer categoryId, Integer writerId);
     Flux<Post> findPostByTitleContains(Long offset, Integer categoryId, String title);
     Flux<Post> findPostByTitleAndContentsContains(Long offset, Integer categoryId, String contents);
     Flux<Post> findPostByTagContains(Long offset, Integer categoryId, String tag);

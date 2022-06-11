@@ -45,7 +45,7 @@ public class CustomCategoryRepositoryImpl implements CustomCategoryRepository {
                                                         .title((String) row.get("title"))
                                                         .contents((String) row.get("contents"))
                                                         .date((LocalDateTime) row.get("date"))
-                                                        .writer((String) row.get("writer"))
+                                                        .writerId((Integer) row.get("writer"))
                                                         .likes((Integer) row.get("likes"))
                                                         .build())
                                                 .collect(Collectors.toList())

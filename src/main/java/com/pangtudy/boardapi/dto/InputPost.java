@@ -21,5 +21,5 @@ public class InputPost {
     private String contents;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime date;
-    private String writer;
+    private Integer writerId;
 }

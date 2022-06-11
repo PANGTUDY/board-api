@@ -26,12 +26,12 @@ public class PostCountRepositoryImpl implements PostCountRepository{
     }
 
     @Override
-    public Mono<Long> findPostByWriterCount(Integer categoryId, String writer) {
+    public Mono<Long> findPostByWriterCount(Integer categoryId, Integer writerId) {
         if (categoryId != 0) return r2dbcEntityTemplate.select(Post.class)
-                .matching(query(where("writer").like("%" + writer + "%")
+                .matching(query(where("writer_id").is(writerId)
                         .and(where("category_id").is(categoryId)))).count();
         else return r2dbcEntityTemplate.select(Post.class)
-                .matching(query(where("writer").like("%" + writer + "%"))).count();
+                .matching(query(where("writer_id").like(writerId))).count();
     }
 
     @Override

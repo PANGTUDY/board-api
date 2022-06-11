@@ -12,6 +12,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.stream.Collectors;
 
 import static org.springframework.data.domain.Sort.Order.asc;
@@ -30,8 +31,8 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
     public Mono<Post> findByIdWithComments(Integer id) {
         String query =
                 "SELECT " +
-                        "p.post_id as p_post_id, p.category_id, p.tags, p.title, p.contents as p_contents, p.date as p_date, p.writer as p_writer, p.likes, " +
-                        "c.comment_id, c.post_id, c.follow_id, c.writer, c.contents, c.date, " +
+                        "p.post_id as p_post_id, p.category_id, p.tags, p.title, p.contents as p_contents, p.date as p_date, p.writer_id as p_writer_id, p.likes, " +
+                        "c.comment_id, c.post_id, c.writer_id, c.contents, c.date, " +
                         "FROM post as p " +
                         "LEFT OUTER JOIN comment as c " +
                         "ON p.post_id = c.post_id " +
@@ -50,7 +51,7 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
                                 .title(String.valueOf(rows.get(0).get("title")))
                                 .contents(String.valueOf(rows.get(0).get("p_contents")))
                                 .date((LocalDateTime) rows.get(0).get("p_date"))
-                                .writer(String.valueOf(rows.get(0).get("p_writer")))
+                                .writerId((Integer) rows.get(0).get("p_writer_id"))
                                 .likes((Integer) rows.get(0).get("likes"))
                                 .comments(
                                         rows.stream()
@@ -71,7 +72,7 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
                 })
                 .flatMap(post -> {
                     String query2 = "SELECT " +
-                            "p.post_id as p_post_id, p.category_id, p.tags, p.title, p.contents as p_contents, p.date as p_date, p.writer as p_writer, p.likes, " +
+                            "p.post_id as p_post_id, p.category_id, p.tags, p.title, p.contents as p_contents, p.date as p_date, p.writer_id as p_writer_id, p.likes, " +
                             "c.category_id as c_category_id, c.category_name, " +
                             "FROM post as p " +
                             "LEFT OUTER JOIN category as c " +
@@ -110,13 +111,13 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
     }
 
     @Override
-    public Flux<Post> findPostByWriter(Long offset, Integer categoryId, String writer) {
+    public Flux<Post> findPostByWriter(Long offset, Integer categoryId, Integer writerId) {
         if (categoryId != 0) return r2dbcEntityTemplate.select(Post.class)
-                .matching(query(where("writer").like("%" + writer + "%")
+                .matching(query(where("writer_id").is(writerId)
                         .and(where("category_id").is(categoryId)))
                         .offset(offset).limit(SELECT_LIMIT)).all();
         else return r2dbcEntityTemplate.select(Post.class)
-                .matching(query(where("writer").like("%" + writer + "%"))
+                .matching(query(where("writer_id").is(writerId))
                         .offset(offset).limit(SELECT_LIMIT)).all();
     }
 

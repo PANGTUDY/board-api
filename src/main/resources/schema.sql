@@ -16,7 +16,7 @@ CREATE TABLE POST
     title       VARCHAR(50)  not null,
     contents    VARCHAR(500)  not null,
     date        datetime     not null,
-    writer      VARCHAR(20)  not null,
+    writer_id   INT(20)      not null,
     likes       INT(20),
     FOREIGN KEY (category_id) REFERENCES CATEGORY (category_id) ON DELETE CASCADE
 );
