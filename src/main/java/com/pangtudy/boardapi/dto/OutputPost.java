@@ -25,5 +25,6 @@ public class OutputPost {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDateTime date;
     private Integer writerId;
+    private String writerName;
     private Integer likes;
 }

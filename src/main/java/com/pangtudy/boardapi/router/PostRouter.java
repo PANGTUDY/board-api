@@ -2,6 +2,7 @@ package com.pangtudy.boardapi.router;
 
 import com.pangtudy.boardapi.dto.InputPost;
 import com.pangtudy.boardapi.dto.InputUser;
+import com.pangtudy.boardapi.dto.OutputPost;
 import com.pangtudy.boardapi.entity.Likes;
 import com.pangtudy.boardapi.entity.Post;
 import com.pangtudy.boardapi.handler.PostHandler;
@@ -39,7 +40,7 @@ public class PostRouter {
                     operation = @Operation(summary = "특정 게시글 조회", operationId = "getPost",
                             responses = {
                                     @ApiResponse(responseCode = "200", description = "successful operation",
-                                            content = @Content(schema = @Schema(implementation = Post.class))),
+                                            content = @Content(schema = @Schema(implementation = OutputPost.class))),
                                     @ApiResponse(responseCode = "400", description = "Invalid Post details supplied")},
                             parameters = {
                                     @Parameter(in = ParameterIn.PATH, name = "post_id")}
@@ -73,7 +74,7 @@ public class PostRouter {
                     operation = @Operation(summary = "앞 뒤 게시글 조회", operationId = "getAdjacentPosts",
                             responses = {
                                     @ApiResponse(responseCode = "200", description = "successful operation",
-                                            content = @Content(schema = @Schema(implementation = Post.class))),
+                                            content = @Content(schema = @Schema(implementation = OutputPost.class))),
                                     @ApiResponse(responseCode = "400", description = "Invalid Post details supplied")},
                             parameters = {
                                     @Parameter(in = ParameterIn.PATH, name = "category_id"),
@@ -85,7 +86,7 @@ public class PostRouter {
                     operation = @Operation(summary = "게시글 수정", operationId = "updatePost",
                             responses = {
                                     @ApiResponse(responseCode = "200", description = "successful operation",
-                                            content = @Content(schema = @Schema(implementation = Post.class))),
+                                            content = @Content(schema = @Schema(implementation = OutputPost.class))),
                                     @ApiResponse(responseCode = "400", description = "Invalid Post ID supplied"),
                                     @ApiResponse(responseCode = "404", description = "Post not found")},
                             parameters = {
@@ -110,7 +111,7 @@ public class PostRouter {
                     operation = @Operation(summary = "게시글 작성", operationId = "insertPost",
                             responses = {
                                     @ApiResponse(responseCode = "200", description = "successful operation",
-                                            content = @Content(schema = @Schema(implementation = Post.class))),
+                                            content = @Content(schema = @Schema(implementation = OutputPost.class))),
                                     @ApiResponse(responseCode = "400", description = "Invalid Post details supplied")},
                             requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = InputPost.class)))
                     )),
@@ -120,7 +121,7 @@ public class PostRouter {
                     operation = @Operation(summary = "게시글 조회", operationId = "getPosts",
                             responses = {
                                     @ApiResponse(responseCode = "200", description = "successful operation",
-                                            content = @Content(schema = @Schema(implementation = Post.class)))},
+                                            content = @Content(schema = @Schema(implementation = OutputPost.class)))},
                             parameters = {
                                     @Parameter(name = "page_num", in = ParameterIn.QUERY, example = "1", schema = @Schema(type = "Integer")),
                                     @Parameter(name = "category_id", in = ParameterIn.QUERY, schema = @Schema(type = "Integer")),

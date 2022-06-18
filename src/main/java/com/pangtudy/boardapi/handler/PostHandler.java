@@ -1,12 +1,12 @@
 package com.pangtudy.boardapi.handler;
 
-import com.pangtudy.boardapi.dto.InputPost;
-import com.pangtudy.boardapi.dto.InputUser;
-import com.pangtudy.boardapi.dto.PageSearchResult;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.pangtudy.boardapi.dto.*;
 import com.pangtudy.boardapi.entity.Likes;
 import com.pangtudy.boardapi.entity.Post;
 import com.pangtudy.boardapi.repository.LikesRepository;
 import com.pangtudy.boardapi.repository.PostRepository;
+import com.pangtudy.boardapi.repository.UserRepository;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,13 +29,14 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ok
 public class PostHandler {
     private final PostRepository postRepository;
     private final LikesRepository likesRepository;
+    private final UserRepository userRepository;
+
     public static final Long PAGE_POST_COUNT = 10L;
 
     public Mono<ServerResponse> create(ServerRequest req) {
         Mono<InputPost> newPost = req.bodyToMono(InputPost.class);
         Mono<Post> savedPost = newPost
                 .flatMap(value -> Mono.just(Post.builder()
-                        .categoryId(value.getCategoryId())
                         .tags(value.getTags())
                         .title(value.getTitle())
                         .contents(value.getContents())
@@ -46,7 +47,22 @@ public class PostHandler {
                 ))
                 .flatMap(post -> postRepository.save(post));
 
-        return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(savedPost, Post.class));
+        Mono<OutputPost> outputPost = savedPost
+                .flatMap(value -> userRepository.getUser(value.getWriterId())
+                        .flatMap(user ->
+                                Mono.just(OutputPost.builder()
+                                        .postId(value.getPostId())
+                                        .categoryId(value.getCategoryId())
+                                        .tags(value.getTags())
+                                        .title(value.getTitle())
+                                        .contents(value.getContents())
+                                        .date(value.getDate())
+                                        .writerId(value.getWriterId())
+                                        .writerName(user.getName())
+                                        .likes(value.getLikes())
+                                        .build())));
+
+        return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(outputPost, OutputPost.class));
     }
 
     public Mono<ServerResponse> readAll(ServerRequest req) {
@@ -59,7 +75,7 @@ public class PostHandler {
         Flux<Post> posts;
         Integer pageNum = pageNumString.map(Integer::valueOf).orElse(1);
         Integer categoryNum = categoryId.map(Integer::valueOf).orElse(0);
-        Integer writerNum = writerId.map(Integer::valueOf).orElse(0);
+        String writerString = writerId.map(String::valueOf).orElse("");
         String titleString = title.map(String::valueOf).orElse("");
         String contentsString = contents.map(String::valueOf).orElse("");
         String tagString = tag.map(String::valueOf).orElse("");
@@ -67,7 +83,8 @@ public class PostHandler {
         Long offset = (pageNum - 1) * PAGE_POST_COUNT;
         Mono<Long> resultPostCount;
 
-        if (writerNum != 0) {
+        if (!writerString.equals("")) {
+            Integer writerNum = 1; //TODO : writerString을 포함하는 모든 writer에 대해 검색
             posts = postRepository.findPostByWriter(offset, categoryNum, writerNum);
             resultPostCount = postRepository.findPostByWriterCount(categoryNum, writerNum);
         } else if (!titleString.equals("")) {
@@ -87,33 +104,77 @@ public class PostHandler {
             resultPostCount = postRepository.findAllPostCount();
         }
 
-        posts = posts.sort(Comparator.comparingInt(Post::getPostId).reversed());
+        Flux<OutputPost> outputPostFlux = posts
+                .flatMap(value -> userRepository.getUser(value.getWriterId())
+                        .flatMap(user ->
+                                Mono.just(OutputPost.builder()
+                                        .postId(value.getPostId())
+                                        .categoryId(value.getCategoryId())
+                                        .tags(value.getTags())
+                                        .title(value.getTitle())
+                                        .contents(value.getContents())
+                                        .date(value.getDate())
+                                        .writerId(value.getWriterId())
+                                        .writerName(user.getName())
+                                        .likes(value.getLikes())
+                                        .build())))
+                .sort(Comparator.comparingInt(OutputPost::getPostId).reversed());
 
-        return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(posts.collectList().zipWith(resultPostCount)
-                .map(tuples -> {
-                    List<Post> postList = tuples.getT1();
-                    long totalPageNum = (tuples.getT2() / PAGE_POST_COUNT) + 1;
+        return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(
+                outputPostFlux.collectList().zipWith(resultPostCount)
+                        .map(tuples -> {
+                            List<OutputPost> postList = tuples.getT1();
+                            long totalPageNum = (tuples.getT2() / PAGE_POST_COUNT) + 1;
 
-                    return PageSearchResult.builder()
-                            .posts(postList)
-                            .currPageNum(pageNum.longValue())
-                            .totalPageNum(totalPageNum)
-                            .build();
-                }), PageSearchResult.class));
+                            return PageSearchResult.builder()
+                                    .posts(postList)
+                                    .currPageNum(pageNum.longValue())
+                                    .totalPageNum(totalPageNum)
+                                    .build();
+                        }), PageSearchResult.class));
     }
 
     public Mono<ServerResponse> read(ServerRequest req) {
         int postId = Integer.parseInt(req.pathVariable("post_id"));
-        Mono<Post> posts = postRepository.findByIdWithComments(postId);
-        return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(posts, Post.class));
+        Mono<Post> postMono = postRepository.findByIdWithComments(postId);
+        Mono<OutputPost> outputPostMono = postMono
+                .flatMap(value -> userRepository.getUser(value.getWriterId())
+                        .flatMap(user ->
+                                Mono.just(OutputPost.builder()
+                                        .postId(value.getPostId())
+                                        .categoryId(value.getCategoryId())
+                                        .tags(value.getTags())
+                                        .title(value.getTitle())
+                                        .contents(value.getContents())
+                                        .date(value.getDate())
+                                        .writerId(value.getWriterId())
+                                        .writerName(user.getName())
+                                        .likes(value.getLikes())
+                                        .build())));
+        return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(outputPostMono, OutputPost.class));
     }
 
     public Mono<ServerResponse> readAdjacent(ServerRequest req) {
         int categoryId = Integer.parseInt(req.pathVariable("category_id"));
         int postId = Integer.parseInt(req.pathVariable("post_id"));
-        Flux<Post> posts = postRepository.findAdjacentPosts(categoryId, postId);
-        posts = posts.sort(Comparator.comparingInt(Post::getPostId).reversed());
-        return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(posts, Post.class));
+        Flux<Post> posts = postRepository.findAdjacentPosts(categoryId, postId)
+                .sort(Comparator.comparingInt(Post::getPostId).reversed());
+
+        Flux<OutputPost> outputPostFlux = posts
+                .flatMap(value -> userRepository.getUser(value.getWriterId())
+                        .flatMap(user ->
+                                Mono.just(OutputPost.builder()
+                                        .postId(value.getPostId())
+                                        .categoryId(value.getCategoryId())
+                                        .tags(value.getTags())
+                                        .title(value.getTitle())
+                                        .contents(value.getContents())
+                                        .date(value.getDate())
+                                        .writerId(value.getWriterId())
+                                        .writerName(user.getName())
+                                        .likes(value.getLikes())
+                                        .build())));
+        return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(outputPostFlux, OutputPost.class));
     }
 
     public Mono<ServerResponse> update(ServerRequest req) {
@@ -123,15 +184,29 @@ public class PostHandler {
         Mono<Post> updatedPost = newPost
                 .flatMap(value -> Mono.just(Post.builder()
                         .postId(postId)
-                        .categoryId(value.getCategoryId())
                         .tags(value.getTags())
                         .title(value.getTitle())
                         .contents(value.getContents())
                         .date(value.getDate())
                         .writerId(value.getWriterId())
+                        //TODO : .likes(oldPost.flatMap(p->p.getLikes()))
                         .build()))
                 .flatMap(post -> postRepository.save(post));
-        return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(updatedPost, Post.class));
+        Mono<OutputPost> outputPostMono = updatedPost
+                .flatMap(value -> userRepository.getUser(value.getWriterId())
+                        .flatMap(user ->
+                                Mono.just(OutputPost.builder()
+                                        .postId(value.getPostId())
+                                        .categoryId(value.getCategoryId())
+                                        .tags(value.getTags())
+                                        .title(value.getTitle())
+                                        .contents(value.getContents())
+                                        .date(value.getDate())
+                                        .writerId(value.getWriterId())
+                                        .writerName(user.getName())
+                                        .likes(value.getLikes())
+                                        .build())));
+        return ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(outputPostMono, OutputPost.class));
     }
 
     public Mono<ServerResponse> updateLikes(ServerRequest req) {

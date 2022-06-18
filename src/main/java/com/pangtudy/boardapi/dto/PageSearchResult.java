@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PageSearchResult implements Serializable {
-    private List<Post> posts;
+    private List<OutputPost> posts;
     private long currPageNum;
     private long totalPageNum;
 }

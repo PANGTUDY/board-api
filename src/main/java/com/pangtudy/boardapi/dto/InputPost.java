@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class InputPost {
-    private Integer categoryId;
     private String tags;
     private String title;
     private String contents;
