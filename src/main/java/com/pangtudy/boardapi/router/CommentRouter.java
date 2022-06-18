@@ -1,6 +1,6 @@
 package com.pangtudy.boardapi.router;
 
-import com.pangtudy.boardapi.entity.Comment;
+import com.pangtudy.boardapi.dto.OutputComment;
 import com.pangtudy.boardapi.dto.InputComment;
 import com.pangtudy.boardapi.handler.CommentHandler;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,7 +37,7 @@ public class CommentRouter {
                     operation = @Operation(summary = "특정 댓글 조회", operationId = "getComment",
                             responses = {
                                     @ApiResponse(responseCode = "200", description = "successful operation",
-                                            content = @Content(schema = @Schema(implementation = Comment.class))),
+                                            content = @Content(schema = @Schema(implementation = OutputComment.class))),
                                     @ApiResponse(responseCode = "400", description = "Invalid Comment details supplied")},
                             parameters = {
                                     @Parameter(in = ParameterIn.PATH, name = "post_id"),
@@ -49,7 +49,7 @@ public class CommentRouter {
                     operation = @Operation(summary = "댓글 수정", operationId = "updateComment",
                             responses = {
                                     @ApiResponse(responseCode = "200", description = "successful operation",
-                                            content = @Content(schema = @Schema(implementation = Comment.class))),
+                                            content = @Content(schema = @Schema(implementation = OutputComment.class))),
                                     @ApiResponse(responseCode = "400", description = "Invalid Comment ID supplied"),
                                     @ApiResponse(responseCode = "404", description = "Comment not found")},
                             parameters = {
@@ -75,7 +75,7 @@ public class CommentRouter {
                     operation = @Operation(summary = "댓글 작성", operationId = "insertComment",
                             responses = {
                                     @ApiResponse(responseCode = "200", description = "successful operation",
-                                            content = @Content(schema = @Schema(implementation = Comment.class))),
+                                            content = @Content(schema = @Schema(implementation = OutputComment.class))),
                                     @ApiResponse(responseCode = "400", description = "Invalid Comment details supplied")},
                             parameters = {
                                     @Parameter(in = ParameterIn.PATH, name = "post_id")},
@@ -88,7 +88,7 @@ public class CommentRouter {
                     operation = @Operation(summary = "게시글 댓글 조회", operationId = "getComments",
                             responses = {
                                     @ApiResponse(responseCode = "200", description = "successful operation",
-                                            content = @Content(schema = @Schema(implementation = Comment.class))),
+                                            content = @Content(schema = @Schema(implementation = OutputComment.class))),
                                     @ApiResponse(responseCode = "400", description = "Invalid Comment details supplied")},
                             parameters = {
                                     @Parameter(in = ParameterIn.PATH, name = "post_id")}

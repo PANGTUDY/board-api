@@ -75,22 +75,20 @@ public class CommentHandler {
     public Mono<ServerResponse> read(ServerRequest req) {
         int postId = Integer.parseInt(req.pathVariable("post_id"));
         int commentId = Integer.parseInt(req.pathVariable("comment_id"));
-
-        //TODO : 특정 댓글 조회
         return commentRepository.findCommentByPostIdAndCommentId(postId, commentId)
-                .flatMap(comment -> userRepository.getUser(comment.getWriterId())
-                        .flatMap(user ->
-                                Mono.just(OutputComment.builder()
-                                        .commentId(comment.getCommentId())
-                                        .writerId(comment.getWriterId())
-                                        .contents(comment.getContents())
-                                        .date(comment.getDate())
-                                        .writerName(user.getName())
-                                        .build()))
-                        .flatMap(outputComment ->
-                                ok().contentType(APPLICATION_JSON)
-                                        .body(BodyInserters.fromProducer(outputComment, OutputComment.class)))
-                        .switchIfEmpty(ServerResponse.notFound().build()));
+                .flatMap(comment -> ok().contentType(APPLICATION_JSON).body(BodyInserters.fromProducer(
+                        userRepository.getUser(comment.getWriterId()).flatMap(
+                                user ->
+                                        Mono.just(OutputComment.builder()
+                                                .commentId(comment.getCommentId())
+                                                .writerId(comment.getWriterId())
+                                                .contents(comment.getContents())
+                                                .date(comment.getDate())
+                                                .writerName(user.getName())
+                                                .build())
+                        ), OutputComment.class)
+                ))
+                .switchIfEmpty(ServerResponse.notFound().build());
     }
 
     public Mono<ServerResponse> update(ServerRequest req) {
